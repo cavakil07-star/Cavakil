@@ -8,7 +8,6 @@ import EnquiryForm from '@/components/website/EnquiryForm';
 import ScrollableServiceSections from '@/components/website/ScrollableServiceSections';
 import TabbedDocuments from '@/components/website/TabbedDocuments';
 import { getCategories, getServices } from '@/lib/main/getHomePageData';
-import { getServerSession } from 'next-auth';
 
 
 export async function generateStaticParams() {

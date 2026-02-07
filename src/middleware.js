@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { auth } from '@/auth';
 
 export async function middleware(req) {
     const path = req.nextUrl.pathname;
-
-    const session = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
+    const session = await auth();
 
     // Admin route protection
     if (path.startsWith('/admin')) {
@@ -12,7 +11,7 @@ export async function middleware(req) {
             return NextResponse.redirect(new URL('/auth', req.url));
         }
 
-        if (!['admin', 'sub-admin'].includes(session.role)) {
+        if (!['admin', 'sub-admin'].includes(session.user?.role)) {
             return NextResponse.redirect(new URL('/', req.url));
         }
     }
@@ -23,7 +22,7 @@ export async function middleware(req) {
             return NextResponse.redirect(new URL('/', req.url));
         }
 
-        if (session.role !== 'user') {
+        if (session.user?.role !== 'user') {
             return NextResponse.redirect(new URL('/', req.url));
         }
     }
