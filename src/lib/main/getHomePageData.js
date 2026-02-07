@@ -81,10 +81,10 @@ export const getServices = async () => {
         }
 
         const data = await res.json();
-        return data || [];
+        return data || { data: [] };
     } catch (error) {
         console.log('Error fetching services:', error);
-        return [];
+        return { data: [] };
     }
 };
 
@@ -99,10 +99,10 @@ export const getCategories = async () => {
         }
 
         const data = await res.json();
-        return data || [];
+        return data || { data: [] };
     } catch (error) {
         console.log('Error fetching categories:', error);
-        return [];
+        return { data: [] };
     }
 };
 

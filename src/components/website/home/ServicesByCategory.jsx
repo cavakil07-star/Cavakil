@@ -3,8 +3,10 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-export default function ServicesByCategory({ services, categories }) {
-    const displayCategories = categories.slice(0, 9);
+export default function ServicesByCategory({ services = [], categories = [] }) {
+    const catList = Array.isArray(categories) ? categories : [];
+    const svcList = Array.isArray(services) ? services : [];
+    const displayCategories = catList.slice(0, 9);
 
     // Animation variants
     const container = {
@@ -72,8 +74,8 @@ export default function ServicesByCategory({ services, categories }) {
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"
                 >
                     {displayCategories.map((category) => {
-                        const matchedServices = services.filter(
-                            service => service.categories.includes(category._id)
+                        const matchedServices = svcList.filter(
+                            service => service.categories?.includes(category._id)
                         ).slice(0, 7);
 
                         return (
