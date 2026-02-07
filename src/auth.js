@@ -1,9 +1,8 @@
-// src/auth.js - Auth.js v5 configuration
+// src/auth.js - Auth.js v5 configuration (for server-side auth checks)
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
-    // No adapter needed for JWT sessions
+const authConfig = {
     session: { strategy: 'jwt' },
     providers: [
         Credentials({
@@ -13,20 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 email: { label: 'Email', type: 'email' },
                 password: { label: 'Password', type: 'password' }
             },
-            async authorize(credentials) {
-                const { email, password } = credentials;
-                const { connectDB } = await import('@/lib/mongodb');
-                await connectDB();
-                const User = (await import('@/models/userModel')).default;
-                const bcrypt = (await import('bcryptjs')).default;
-                
-                const user = await User.findOne({ email }).select('+password');
-                if (!user) throw new Error('No user found');
-                if (!["admin", "sub-admin"].includes(user.role)) throw new Error("Not authorized");
-                const valid = await bcrypt.compare(password, user.password);
-                if (!valid) throw new Error('Invalid credentials');
-                return { id: user._id.toString(), role: user.role, phone: user.phone };
-            }
+            authorize: () => null // Placeholder - actual auth in route.js
         }),
         Credentials({
             id: 'otp',
@@ -36,41 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 sessionId: { label: 'Session ID', type: 'text' },
                 otp: { label: 'OTP', type: 'text' }
             },
-            async authorize(credentials) {
-                const { phone, sessionId, otp } = credentials;
-                try {
-                    const { connectDB } = await import('@/lib/mongodb');
-                    await connectDB();
-                    const User = (await import('@/models/userModel')).default;
-                    
-                    console.log(sessionId);
-                    console.log(otp);
-                    // Validate phone format
-                    if (!phone || !/^\d{10}$/.test(phone)) {
-                        throw new Error('Invalid phone number');
-                    }
-
-                    let user = await User.findOne({ phone });
-
-                    // Prevent admin login through this flow
-                    if (user && user.role !== 'user') {
-                        throw new Error('Invalid user: Admin must use email login');
-                    }
-
-                    if (!user) {
-                        user = await User.create({ phone, role: 'user' });
-                    }
-
-                    return {
-                        id: user._id.toString(),
-                        role: user.role,
-                        phone: user.phone
-                    };
-                } catch (error) {
-                    console.error('OTP Auth Error:', error);
-                    throw new Error(error.message || 'Could not authenticate');
-                }
-            }
+            authorize: () => null // Placeholder - actual auth in route.js
         })
     ],
     callbacks: {
@@ -79,7 +31,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 token.id = user.id;
                 token.role = user.role;
                 token.phone = user.phone;
-
                 const maxAge = user.role === 'user' ? 60 * 60 * 24 * 30 : 60 * 30;
                 token.exp = Math.floor(Date.now() / 1000) + maxAge;
             }
@@ -98,7 +49,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         signIn: '/',
     },
     trustHost: true,
-});
+};
+
+export const { auth } = NextAuth(authConfig);
 
 // Export authOptions for backwards compatibility
 export const authOptions = {
