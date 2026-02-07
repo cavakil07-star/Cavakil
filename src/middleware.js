@@ -1,31 +1,13 @@
 import { NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
-
-// Force Node.js runtime instead of Edge
-export const runtime = 'nodejs';
+import { getToken } from 'next-auth/jwt';
 
 export async function middleware(req) {
     const path = req.nextUrl.pathname;
     
-    // Get token from cookies
-    const cookieName = process.env.NODE_ENV === 'production' 
-        ? '__Secure-authjs.session-token' 
-        : 'authjs.session-token';
-    const tokenCookie = req.cookies.get(cookieName)?.value 
-        || req.cookies.get('next-auth.session-token')?.value
-        || req.cookies.get('__Secure-next-auth.session-token')?.value;
-    
-    let token = null;
-    
-    if (tokenCookie) {
-        try {
-            const secret = new TextEncoder().encode(process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET);
-            const { payload } = await jwtVerify(tokenCookie, secret);
-            token = payload;
-        } catch (error) {
-            console.error('Token verification failed:', error.message);
-        }
-    }
+    const token = await getToken({ 
+        req, 
+        secret: process.env.NEXTAUTH_SECRET 
+    });
 
     // Admin route protection
     if (path.startsWith('/admin')) {

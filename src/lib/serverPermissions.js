@@ -1,24 +1,24 @@
 // lib/serverPermissions.js
 
-import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
+import { getToken } from 'next-auth/jwt';
 
 // Server-side only: check an incoming request
 export async function requirePermissionApi(req, resource, action) {
     try {
-        const session = await auth();
+        const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
-        if (!session?.user) {
+        if (!token) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        if (session.user.role === 'admin') {
+        if (token.role === 'admin') {
             return null; // admins always allowed
         }
 
         // for sub-admin, check their permissions map
-        const perms = session.user.permissions?.[resource];
-        if (session.user.role === 'sub-admin' && perms?.[action]) {
+        const perms = token.permissions?.[resource];
+        if (token.role === 'sub-admin' && perms?.[action]) {
             return null;
         }
 

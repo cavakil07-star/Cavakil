@@ -96,7 +96,5 @@ const authConfig = {
     trustHost: true,
 };
 
-const { handlers, auth } = NextAuth(authConfig);
-
+const { handlers } = NextAuth(authConfig);
 export const { GET, POST } = handlers;
-export { auth };
