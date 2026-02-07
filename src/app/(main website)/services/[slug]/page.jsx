@@ -20,7 +20,8 @@ export async function generateStaticParams() {
 
 
 export async function generateMetadata({ params }) {
-    const service = await getServiceBySlug(params.slug);
+    const { slug } = await params;
+    const service = await getServiceBySlug(slug);
 
     if (!service) return {
         title: "Service Not Found",
@@ -47,13 +48,14 @@ export async function generateMetadata({ params }) {
 }
 
 async function Page({ params }) {
+    const { slug } = await params;
 
     const servicesData = await getServices();
     const services = servicesData?.data || [];
     const categoriesData = await getCategories();
     const categories = categoriesData?.data || [];
 
-    const service = await getServiceBySlug(params.slug);
+    const service = await getServiceBySlug(slug);
     // console.log(service)
     if (!service) {
         notFound();

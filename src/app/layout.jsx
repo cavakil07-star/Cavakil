@@ -1,6 +1,7 @@
 // app/layout.jsx
 import "./globals.css";;
 import { Poppins, Montserrat, Inter } from "next/font/google";
+import WhatsAppButton from "@/components/website/WhatsAppButton";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -21,7 +22,11 @@ const montserrat = Montserrat({
 });
 
 export const metadata = {
-  title: "CA Vakeel",
+  title: {
+    template: "%s | CA Vakil",
+    default: "CA Vakil",
+  },
+  description: "Simplifying Tax, GST, trademarks, and compliance for modern businesses across India.",
 };
 
 export default function RootLayout({ children }) {
@@ -32,6 +37,7 @@ export default function RootLayout({ children }) {
         className={`${poppins.variable} ${montserrat.variable} ${inter.variable} antialiased`}
       >
         <main>{children}</main>
+        {/* <WhatsAppButton /> */}
       </body>
     </html>
   );

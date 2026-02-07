@@ -2,11 +2,44 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+    CheckCircle2, 
+    FileText, 
+    ArrowRight, 
+    ShieldCheck, 
+    Sparkles, 
+    AlertCircle,
+    ChevronRight,
+    PlayCircle,
+    Gift
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
 
 const TabbedDocuments = ({ subServices }) => {
     const router = useRouter()
     const tabs = subServices || [];
     const [activeTab, setActiveTab] = useState(0);
+
+    // If there are no sub-services, display a message instead of an empty component.
+    if (!tabs || tabs.length === 0) {
+        return (
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full bg-gray-50/50 backdrop-blur-sm rounded-2xl border border-gray-200 p-12 text-center"
+            >
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <AlertCircle className="w-8 h-8 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-700 mb-2">Service Options Coming Soon</h3>
+                <p className="text-gray-500 max-w-md mx-auto">Detailed pricing and service packages are currently being updated for this category.</p>
+            </motion.div>
+        );
+    }
+
     const currentTab = tabs[activeTab] || {};
 
     // Calculate pricing information
@@ -16,139 +49,195 @@ const TabbedDocuments = ({ subServices }) => {
     // Determine pricing type
     const isDiscounted = discountedPrice < actualPrice;
     const isFree = discountedPrice === 0 && actualPrice === 0;
-    const isRegular = !isFree && !isDiscounted;
-
-    // Calculate discount percentage and savings
     const discountPercentage = isDiscounted
         ? Math.round(100 - (discountedPrice / actualPrice) * 100)
         : 0;
     const savings = actualPrice - discountedPrice;
 
-    function handleClick() {
-        router.replace()
-    }
-
     return (
-        <div className="w-full bg-gradient-to-br from-white to-[#f0f7ff] rounded-md overflow-hidden border border-[#00336620]">
-            <div className="flex flex-col md:flex-row">
-                {/* Tabs Column */}
-                <div className="bg-[#f5f9ff] w-full md:w-64 border-r border-[#00336610] p-4">
-                    <div className="text-[#003366] font-bold text-lg mb-4 pl-2">Services</div>
-                    <div className="space-y-2">
+        <div className="w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+            <div className="flex flex-col lg:flex-row min-h-[600px]">
+                {/* Modern Sidebar Tabs */}
+                <div className="lg:w-80 bg-slate-50 border-r border-slate-200 p-6 flex flex-col gap-2">
+                    <h3 className="text-slate-800 font-bold text-lg mb-4 px-2 flex items-center gap-2">
+                        <Sparkles className="w-5 h-5 text-blue-600" />
+                        Select a Package
+                    </h3>
+                    <div className="space-y-3">
                         {tabs.map((tab, index) => {
-                            const tabActualPrice = tab.actualPrice || 0;
-                            const tabDiscountedPrice = tab.discountedPrice ?? tabActualPrice;
-                            const isTabDiscounted = tabDiscountedPrice < tabActualPrice;
-                            const isTabFree = tabDiscountedPrice === 0 && tabActualPrice === 0;
-
+                            const isActive = activeTab === index;
                             return (
-                                <button
+                                <motion.button
                                     key={index}
                                     onClick={() => setActiveTab(index)}
+                                    whileHover={{ x: 4 }}
+                                    whileTap={{ scale: 0.98 }}
                                     className={`
-                                        w-full text-left px-4 py-3 rounded-xl transition-all duration-300
-                                        flex items-center
-                                        ${activeTab === index
-                                            ? 'bg-[#003366] text-white shadow-lg transform -translate-x-1'
-                                            : 'bg-white text-[#003366] hover:bg-[#e6f0ff] border border-[#00336620]'
+                                        w-full text-left px-5 py-4 rounded-xl transition-all duration-300
+                                        relative group overflow-hidden border
+                                        ${isActive 
+                                            ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/30' 
+                                            : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300 hover:shadow-md'
                                         }
                                     `}
                                 >
-                                    <div className={`w-2 h-2 rounded-full mr-3 ${activeTab === index ? 'bg-white' : 'bg-[#003366]'}`}></div>
-                                    <span className="flex-1">{tab.name}</span>
-
-                                    {/* Badge for free/discounted services */}
-                                    {isTabFree && (
-                                        <span className="ml-2 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-1 rounded-full">
-                                            FREE
-                                        </span>
+                                    <div className="flex items-center gap-3 relative z-10">
+                                        <div className={`
+                                            w-8 h-8 rounded-lg flex items-center justify-center shrink-0
+                                            ${isActive ? 'bg-white/20' : 'bg-slate-100 text-slate-500 group-hover:bg-blue-50 group-hover:text-blue-600'}
+                                        `}>
+                                            {index + 1}
+                                        </div>
+                                        <span className="font-semibold text-sm leading-snug">{tab.name}</span>
+                                    </div>
+                                    
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activeTabGlow"
+                                            className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-500"
+                                            initial={false}
+                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            style={{ zIndex: 0 }}
+                                        />
                                     )}
-                                    {isTabDiscounted && (
-                                        <span className="ml-2 bg-amber-400 text-amber-900 text-xs font-bold px-2 py-1 rounded-full">
-                                            {Math.round(100 - (tabDiscountedPrice / tabActualPrice) * 100)}% OFF
-                                        </span>
-                                    )}
-                                </button>
+                                </motion.button>
                             );
                         })}
                     </div>
                 </div>
 
-                {/* Content Section */}
-                <div className="flex-1 p-3 sm:p-6">
-                    {/* Banner Section */}
-                    {isFree ? (
-                        <div className="mb-6 bg-gradient-to-r from-green-50 to-emerald-100 border border-emerald-200 rounded-lg p-4 flex items-center">
-                            <div className="bg-emerald-500 text-white rounded-full p-2 mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
+                {/* Content Area */}
+                <div className="flex-1 p-6 lg:p-10 bg-white relative">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeTab}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                            className="h-full flex flex-col"
+                        >
+                            {/* Header Section */}
+                            <div className="mb-8">
+                                <div className="flex flex-wrap items-center gap-3 mb-3">
+                                    <h2 className="text-2xl font-bold text-gray-900">{currentTab.name}</h2>
+                                    {isFree && <Badge className="bg-green-500 hover:bg-green-600">FREE SERVICE</Badge>}
+                                    {isDiscounted && <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-orange-200">{discountPercentage}% OFF</Badge>}
+                                </div>
+                                <div className="h-1 w-20 bg-blue-600 rounded-full"></div>
                             </div>
-                            <div>
-                                <h3 className="font-bold text-emerald-800">Free Service!</h3>
-                                <p className="text-emerald-700 text-sm">This service is provided at no cost</p>
-                            </div>
-                        </div>
-                    ) : isDiscounted && (
-                        <div className="mb-6 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-lg p-4 flex items-center">
-                            <div className="bg-amber-500 text-amber-900 rounded-full p-2 mr-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 13.047 14.01c-.04.27-.24.49-.5.59l-4.5 1.5a1 1 0 01-1.228-1.228l1.5-4.5c.1-.26.32-.46.59-.5l6.812-1.1L12.033 3.7a1 1 0 011-1.7z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-amber-800">Special Discount!</h3>
-                                <p className="text-amber-700 text-sm">
-                                    {discountPercentage}% off - Save ₹{savings.toLocaleString()}
-                                </p>
-                            </div>
-                        </div>
-                    )}
 
-                    {/* Documents and Details */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-3">Required Documents</h3>
-                            <ul className="list-disc list-inside text-gray-600 space-y-1">
-                                {currentTab.requiredDocuments?.map((doc, idx) => (
-                                    <li key={idx}>{doc.name}</li>
-                                ))}
-                            </ul>
-                        </div>
+                            {/* Requirements Grid */}
+                            <div className="grid md:grid-cols-2 gap-6 mb-8">
+                                {/* Documents Card */}
+                                <Card className="border-0 shadow-lg shadow-gray-100 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all duration-300 group">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="p-2 bg-blue-100 text-blue-600 rounded-lg group-hover:scale-110 transition-transform">
+                                                <FileText className="w-5 h-5" />
+                                            </div>
+                                            <h3 className="font-bold text-gray-800">Required Documents</h3>
+                                        </div>
+                                        <ul className="space-y-3">
+                                            {currentTab.requiredDocuments?.map((doc, idx) => (
+                                                <li key={idx} className="flex items-start gap-3 text-sm text-gray-600">
+                                                    <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />
+                                                    <span>{doc.name}</span>
+                                                </li>
+                                            ))}
+                                            {(!currentTab.requiredDocuments || currentTab.requiredDocuments.length === 0) && (
+                                                <li className="text-sm text-gray-400 italic">No documents specificed</li>
+                                            )}
+                                        </ul>
+                                    </CardContent>
+                                </Card>
 
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
-                            <h3 className="text-lg font-semibold text-gray-700 mb-3">Required Details</h3>
-                            <ul className="list-disc list-inside text-gray-600 space-y-1">
-                                {currentTab.requiredDetails?.map((det, idx) => (
-                                    <li key={idx}>{det.name}</li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
+                                {/* Details Card */}
+                                <Card className="border-0 shadow-lg shadow-gray-100 bg-slate-50/50 hover:bg-white hover:shadow-xl transition-all duration-300 group">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="p-2 bg-purple-100 text-purple-600 rounded-lg group-hover:scale-110 transition-transform">
+                                                <ShieldCheck className="w-5 h-5" />
+                                            </div>
+                                            <h3 className="font-bold text-gray-800">Required Details</h3>
+                                        </div>
+                                        <ul className="space-y-3">
+                                            {currentTab.requiredDetails?.map((det, idx) => (
+                                                <li key={idx} className="flex items-start gap-3 text-sm text-gray-600">
+                                                    <div className="w-1.5 h-1.5 rounded-full bg-purple-400 mt-1.5 shrink-0" />
+                                                    <span>{det.name}</span>
+                                                </li>
+                                            ))}
+                                            {(!currentTab.requiredDetails || currentTab.requiredDetails.length === 0) && (
+                                                <li className="text-sm text-gray-400 italic">No additional details needed</li>
+                                            )}
+                                        </ul>
+                                    </CardContent>
+                                </Card>
 
-                    {/* Pricing and Action */}
-                    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm flex flex-wrap items-center justify-between">
-                        <div className="mb-3 md:mb-0">
-                            <div className="flex items-center">
-                                {isDiscounted && (
-                                    <span className="text-gray-500 line-through mr-2">
-                                        ₹{actualPrice.toLocaleString()}
-                                    </span>
+                                {/* Benefits Card */}
+                                {currentTab.benefits?.length > 0 && (
+                                <Card className="border-0 shadow-lg shadow-gray-100 bg-emerald-50/50 hover:bg-white hover:shadow-xl transition-all duration-300 group md:col-span-2">
+                                    <CardContent className="p-6">
+                                        <div className="flex items-center gap-3 mb-4">
+                                            <div className="p-2 bg-emerald-100 text-emerald-600 rounded-lg group-hover:scale-110 transition-transform">
+                                                <Gift className="w-5 h-5" />
+                                            </div>
+                                            <h3 className="font-bold text-gray-800">Service Benefits</h3>
+                                        </div>
+                                        <ul className="grid md:grid-cols-2 gap-3">
+                                            {currentTab.benefits.map((benefit, idx) => (
+                                                <li key={idx} className="flex items-start gap-3 text-sm text-gray-600">
+                                                    <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+                                                    <span>{benefit}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </CardContent>
+                                </Card>
                                 )}
-                                <span className={`text-2xl font-bold ${isDiscounted ? 'text-amber-600' : 'text-[#003366]'}`}>
-                                    {isFree ? 'FREE' : `₹${discountedPrice.toLocaleString()}`}
-                                </span>
                             </div>
-                            <p className="text-gray-600 text-sm mt-1">
-                                Excluding government charges
-                            </p>
-                        </div>
-                        <Link href={`/getService/${currentTab._id}`}>
-                            <button className="bg-[#003366] hover:bg-[#002244] text-white font-medium py-2 px-6 rounded-lg transition duration-300">
-                                Get Service
-                            </button>
-                        </Link>
-                    </div>
+
+                            {/* Bottom CTA Section */}
+                            <div className="mt-auto">
+                                <div className="bg-gradient-to-r from-gray-900 to-blue-900 rounded-2xl p-6 md:p-8 text-white shadow-2xl relative overflow-hidden group">
+                                    {/* Decorative circles */}
+                                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-white/10 transition-colors duration-500"></div>
+                                    
+                                    <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+                                        <div>
+                                            <div className="flex items-center gap-2 text-blue-200 text-sm font-medium mb-1">
+                                                <Sparkles className="w-4 h-4" />
+                                                <span>All Inclusive Price</span>
+                                            </div>
+                                            <div className="flex items-baseline gap-3">
+                                                <span className="text-4xl lg:text-5xl font-bold tracking-tight">
+                                                    {isFree ? 'FREE' : `₹${discountedPrice.toLocaleString()}`}
+                                                </span>
+                                                {isDiscounted && (
+                                                    <div className="flex flex-col">
+                                                        <span className="text-gray-400 line-through text-sm">₹{actualPrice.toLocaleString()}</span>
+                                                        <span className="text-emerald-400 text-xs font-bold">SAVE ₹{savings.toLocaleString()}</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            <p className="text-gray-400 text-xs mt-2">* Excluding government fees if applicable</p>
+                                        </div>
+
+                                        <Link href={`/getService/${currentTab._id}`}>
+                                            <Button 
+                                                size="lg" 
+                                                className="bg-white text-blue-900 hover:bg-blue-50 hover:text-blue-700 h-14 px-8 text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 group/btn"
+                                            >
+                                                Get Started Now
+                                                <ArrowRight className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </AnimatePresence>
                 </div>
             </div>
         </div>
@@ -156,6 +245,8 @@ const TabbedDocuments = ({ subServices }) => {
 };
 
 export default TabbedDocuments;
+
+// export default TabbedDocuments;
 
 
 

@@ -102,6 +102,29 @@ export default function Step1BasicDetails() {
                     </FormItem>
                 )}
             />
+
+            {/* Display Order */}
+            <FormField
+                control={control}
+                name="displayOrder"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Display Order</FormLabel>
+                        <FormControl>
+                            <Input 
+                                type="number" 
+                                placeholder="e.g., 10, 20, 30" 
+                                {...field} 
+                                onChange={e => field.onChange(e.target.value ? parseInt(e.target.value, 10) : '')}
+                            />
+                        </FormControl>
+                        <p className="text-sm text-gray-500 mt-1">
+                            Lower numbers appear first. Use increments of 10 (e.g., 10, 20, 30) for easy reordering.
+                        </p>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
             <div className='space-y-6'>
                 {/* Short Description */}
                 <div className='col-span-2'>

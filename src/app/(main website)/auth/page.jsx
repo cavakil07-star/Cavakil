@@ -1,6 +1,10 @@
 import Image from 'next/image'
-import React from 'react'
+import React, { Suspense } from 'react'
 import { LoginForm } from './login-form'
+
+export const metadata = {
+  title: "CA Vakil",
+};
 
 function page() {
     return (
@@ -17,8 +21,10 @@ function page() {
                     </a>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
-                    <div className="w-full max-w-xs">
-                        <LoginForm />
+                    <div className="w-full max-w-md">
+                        <Suspense fallback={<div className="flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div></div>}>
+                            <LoginForm />
+                        </Suspense>
                     </div>
                 </div>
             </div >

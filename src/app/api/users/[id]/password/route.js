@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 import bcrypt from 'bcryptjs';
 
 export async function PATCH(req, { params }) {
+    const { id } = await params;
     await connectDB();
     const { currentPassword, newPassword, confirmNewPassword } = await req.json();
 
@@ -14,7 +15,7 @@ export async function PATCH(req, { params }) {
 
     const password = await bcrypt.hash(newPassword, 10);
 
-    const user = await User.findByIdAndUpdate(params.id, { password: password }, { new: true });
+    const user = await User.findByIdAndUpdate(id, { password: password }, { new: true });
 
     await user.save();
 

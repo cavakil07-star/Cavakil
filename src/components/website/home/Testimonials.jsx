@@ -33,53 +33,46 @@ export default async function Testimonials() {
     ];
 
     return (
-        <section className="bg-secondary w-full" id='testimonials'>
-            <div className='w-11/12 md:max-w-7xl py-16 lg:px-16 mx-auto flex flex-col gap-8'>
+        <section className="w-full bg-gradient-to-b from-white via-[#f4f7ff] to-[#eaf2ff]" id='testimonials'>
+            <div className='w-11/12 md:max-w-7xl py-16 lg:px-16 mx-auto flex flex-col gap-10'>
                 {/* Heading */}
-                <div className="max-w-3xl mx-auto px-4 text-center">
-                    <h2 className="text-white text-2xl md:text-3xl">Simplifying Tax & GST Compliance</h2>
-                    <h3 className="text-white text-3xl md:text-5xl font-bold">
+                <div className="max-w-3xl mx-auto text-center space-y-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-xs md:text-sm font-medium text-slate-700 shadow-sm">
+                        <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                        Client confidence, proven
+                    </div>
+                    <h2 className="text-slate-800 text-2xl md:text-3xl font-semibold">Simplifying Tax & GST Compliance</h2>
+                    <h3 className="text-slate-900 text-3xl md:text-5xl font-bold leading-tight">
                         Trusted by Many Businesses
                     </h3>
+                    <p className="text-slate-600 text-sm md:text-base">
+                        Real stories from founders and operators who rely on us for tax, compliance, and trademark clarity.
+                    </p>
                 </div>
 
 
                 {/* Cards */}
-                <div className="w-full mx-auto py-5 flex flex-col md:flex-row gap-y-16 sm:gap-7">
+                <div className="grid gap-6 md:gap-7 md:grid-cols-3">
                     {testimonials.map((t, idx) => (
-                        <div key={idx} className="relative bg-white rounded-2xl p-4 pt-10 flex-1 shadow-lg">
-                            {/* Avatar */}
-                            {/* <div className="absolute -top-12 left-1/2 transform -translate-x-1/2">
-                                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-sm shadow-black/50">
-                                    <Image
-                                        src={t.imageURL}
-                                        alt={t.userName}
-                                        width={200}
-                                        height={200}
-                                        className='h-full w-full object-cover'
-                                    />
-                                </div>
-                            </div> */}
-
+                        <div key={idx} className="relative bg-white rounded-2xl p-5 pt-8 shadow-[0_20px_50px_-30px_rgba(0,0,0,0.35)] border border-slate-100 transition-transform duration-200 hover:-translate-y-1">
                             {/* Name & Role */}
-                            <h4 className="text-center text-xl font-semibold text-gray-800">
+                            <h4 className="text-center text-lg font-semibold text-gray-900">
                                 {t.userName}
                             </h4>
                             <p className="text-sm text-gray-500 text-center">{t?.designation && t?.designation} {t.company}</p>
 
-
                             {/* Stars */}
-                            <div className="flex justify-center mt-2">
-                                <span className="text-yellow-400 text-lg">★★★★★</span>
+                            <div className="flex justify-center mt-3 gap-0.5 text-amber-400">
+                                <span className="text-lg">★★★★★</span>
                             </div>
 
                             {/* Divider */}
-                            <hr className="my-4 border-t border-dashed border-gray-200" />
+                            <div className="my-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
 
                             {/* Quote */}
                             <blockquote className="text-gray-700 text-sm leading-relaxed relative pl-4">
-                                <span className="absolute top-0 left-0 text-4xl text-gray-200">“</span>
-                                <span className="ml-2">{t.message}</span>
+                                <span className="absolute -left-1 top-0 text-3xl text-gray-200">“</span>
+                                <span className="ml-1 block">{t.message}</span>
                             </blockquote>
                         </div>
                     ))}

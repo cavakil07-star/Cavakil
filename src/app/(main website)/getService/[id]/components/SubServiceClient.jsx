@@ -14,6 +14,9 @@ function SubServiceClient({ subService }) {
                     requiredDocuments={subService.requiredDocuments}
                     actualPrice={subService.actualPrice}
                     discountedPrice={subService.discountedPrice}
+                    isDocumentsRequired={subService.isDocumentsRequired}
+                    isDetailsRequired={subService.isDetailsRequired}
+                    benefits={subService.benefits}
                 />
             </div>
         </SessionProvider>

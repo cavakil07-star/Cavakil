@@ -36,13 +36,13 @@ export default function Sidebar({ isOpen, setIsSidebarOpen, sidebarLinks }) {
     return (
         <div className={`max-[640px]:max-w-58 max-[640px]:absolute ${!isOpen ? "-left-full" : 'left-0'} max-[640px]:top-0 lg:w-[16rem] h-screen bg-gray-900 overflow-auto text-gray-100 border-r border-gray-700 shadow-xl flex flex-col items-center gap-2 px-3 py-2 transition-all duration-500 ease-in-out z-[100]`}>
             {/* Logo Section */}
-            <div className="w-full pt-4 pb-4 px-4 hover:scale-[1.02] transition-transform duration-300 invert brightness-0 filter">
+            <div className="w-full pt-4 pb-4 px-4 hover:scale-[1.02] transition-transform duration-300 rounded-3xl">
                 <Image
                     src={IMAGES.LOGO}
                     alt="logo"
                     height={160}
                     width={160}
-                    className="object-contain "
+                    className="object-contain rounded-2xl"
                 />
             </div>
 
@@ -83,17 +83,11 @@ export default function Sidebar({ isOpen, setIsSidebarOpen, sidebarLinks }) {
             }
             {/* Profile Section */}
             <div className="mt-auto w-full border-t border-gray-700 pt-6">
-                <div className="flex items-center gap-3 px-4 py-2 hover:bg-gray-800 rounded-lg transition-colors">
-                    <Image
-                        src={IMAGES.AVATAR}
-                        alt="User"
-                        width={40}
-                        height={40}
-                        className="rounded-full ring-2 ring-gray-400"
-                    />
-                    <div>
-                        <p className="text-sm font-medium sm:hidden lg:block text-gray-100 capitalize">{role}</p>
-                        <p className="text-xs text-gray-400 sm:hidden lg:block">cavakeel.com</p>
+                <div className="flex items-center p-2 space-x-4">
+                    <Image src={IMAGES.AVATAR} alt="User" width={40} height={40} className="rounded-full ring-2 ring-gray-400" />
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium text-white">Admin Panel</span>
+                        <p className="text-xs text-gray-400 sm:hidden lg:block">cavakil.com</p>
                     </div>
                 </div>
 

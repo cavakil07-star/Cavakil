@@ -6,7 +6,6 @@ function RTEField({ content, setValue }) {
     return (
         <div className="w-full mx-auto bg-white text-primary">
             <TiptapEditor
-                name="content"
                 content={content}
                 setValue={setValue}
                 height="600px"

@@ -17,7 +17,7 @@ async function checkForDuplicate({ userName, company, excludeId = null }) {
 
 export async function GET(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         await connectDB();
 
         const testimonial = await Testimonial.findById(id);
@@ -39,7 +39,7 @@ export async function GET(request, { params }) {
 
 export async function PUT(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const body = await request.json(); // Changed from destructuring { data }
 
         await connectDB();
@@ -88,7 +88,7 @@ export async function PUT(request, { params }) {
 
 export async function DELETE(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         await connectDB();
 
         const deletedTestimonial = await Testimonial.findByIdAndDelete(id);

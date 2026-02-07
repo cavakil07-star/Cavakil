@@ -9,7 +9,7 @@ export async function GET() {
         const res = await Service.find({
             status: true
         })
-            .sort({ updatedAt: -1 })
+            .sort({ displayOrder: 1, updatedAt: -1 })
 
         return NextResponse.json({ success: true, data: res })
     } catch (error) {

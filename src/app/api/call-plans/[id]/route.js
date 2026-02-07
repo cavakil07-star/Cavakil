@@ -40,7 +40,7 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const body = await req.json(); // Changed from destructuring { data }
 
         await connectDB();

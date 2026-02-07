@@ -128,7 +128,7 @@ function TTLForm({ selectedPlan, setSelectedPlan }) {
             key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
             amount: selectedPlan.price,
             currency: 'INR',
-            name: 'CA Vakeel',
+            name: 'CA Vakil',
             description: selectedPlan.name,
             order_id: orderData.id,
             handler: async (response) => {

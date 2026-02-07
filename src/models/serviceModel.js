@@ -62,7 +62,11 @@ const serviceSchema = new mongoose.Schema({
     subServices: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SubService',
-    }]
+    }],
+    displayOrder: {
+        type: Number,
+        default: 99
+    }
 }, {
     timestamps: true,
 });

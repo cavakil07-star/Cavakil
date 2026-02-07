@@ -11,10 +11,13 @@ export default function BigNav({ services, categories }) {
     const catList = Array.isArray(categories) ? categories : []
     const [activeDropdown, setActiveDropdown] = useState(null)
     const primaryColor = "#003366"
-    const topCategories = catList.slice(0, 5)
+    const topCategories = catList.slice(0, 6) // Increased from 5 to 10 categories
 
     const getServicesFor = (catId) =>
-        svcList.filter((s) => Array.isArray(s.categories) && s.categories.includes(catId)).slice(0, 20)
+        svcList
+            .filter((s) => Array.isArray(s.categories) && s.categories.includes(catId))
+            .sort((a, b) => (a.displayOrder ?? 99) - (b.displayOrder ?? 99))
+            .slice(0, 20)
 
     return (
         <div className="hidden xl:flex items-center space-x-2">
@@ -120,6 +123,13 @@ export default function BigNav({ services, categories }) {
                         className="flex items-center px-2 py-3 text-sm font-semibold text-gray-700 hover:text-white hover:bg-[#003366] rounded-lg transition-colors duration-200"
                     >
                         All Services
+                    </Link>
+
+                    <Link
+                        href="/about"
+                        className="flex items-center px-2 py-3 text-sm font-semibold text-gray-700 hover:text-white hover:bg-[#003366] rounded-lg transition-colors duration-200"
+                    >
+                        About Us
                     </Link>
 
                     {/* <Link

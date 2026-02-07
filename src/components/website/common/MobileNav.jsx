@@ -15,7 +15,10 @@ export default function MobileNav({ services, categories, isOpen, onClose }) {
     const topCategories = catList.slice(0, 5)
 
     const getServicesFor = (catId) =>
-        svcList.filter((s) => Array.isArray(s.categories) && s.categories.includes(catId)).slice(0, 4)
+        svcList
+            .filter((s) => Array.isArray(s.categories) && s.categories.includes(catId))
+            .sort((a, b) => (a.displayOrder ?? 99) - (b.displayOrder ?? 99))
+            .slice(0, 4)
 
     const toggleDropdown = (catId) => {
         setActiveDropdown(activeDropdown === catId ? null : catId)
@@ -161,6 +164,14 @@ export default function MobileNav({ services, categories, isOpen, onClose }) {
                                     </Link>
 
                                     <Link
+                                        href="/about"
+                                        className="block p-4 text-center bg-white border border-gray-200 text-gray-800 rounded-xl font-medium"
+                                        onClick={onClose}
+                                    >
+                                        About Us
+                                    </Link>
+
+                                    <Link
                                         href="/contact-us"
                                         className="block p-4 text-center bg-white border border-gray-200 text-gray-800 rounded-xl font-medium flex items-center justify-center"
                                         onClick={onClose}
@@ -171,8 +182,8 @@ export default function MobileNav({ services, categories, isOpen, onClose }) {
                             </div>
 
                             {/* Footer */}
-                            <div className="p-4 border-t border-gray-100 text-center text-xs text-gray-500">
-                                © {new Date().getFullYear()} CA Vakeel. All rights reserved.
+                            <div className="mt-8 text-center text-xs text-gray-400">
+                                © {new Date().getFullYear()} CA Vakil. All rights reserved.
                             </div>
                         </div>
                     </motion.div>

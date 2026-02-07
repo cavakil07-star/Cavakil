@@ -19,10 +19,11 @@ export const Resources = {
     PRIVACY_POLICY: 'privacy-policy',
     REFUND_POLICY: 'refund-policy',
     TERMS_AND_CONDITIONS: 'terms-and-conditions',
+    CLIENT_REVIEWS: 'client-reviews',
+    SUCCESS_STORIES: 'success-stories',
+    MEDIA_FEATURES: 'media-features',
+    CONTACT_US: 'contact-us',
 };
-
-// ABOUT_US: 'about-us',
-// CONTACT_US: 'contact-us',
 // Define possible actions
 export const Actions = {
     VIEW: 'view',

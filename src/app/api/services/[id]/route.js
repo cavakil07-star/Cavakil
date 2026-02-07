@@ -23,7 +23,7 @@ async function checkForDuplicate({ name, slug, excludeId = null }) {
 export async function GET(req, { params }) {
     try {
         await connectDB();
-        const { id } = params;
+        const { id } = await params;
         console.log(id)
 
         const service = await Service.findById(id)
@@ -42,9 +42,14 @@ export async function GET(req, { params }) {
 
 export async function PUT(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         const data = await req.json();
         await connectDB();
+
+        // Ensure displayOrder is a number if provided
+        if (data.displayOrder !== undefined) {
+            data.displayOrder = parseInt(data.displayOrder, 10);
+        }
 
         // Check for duplicates
         const duplicate = await checkForDuplicate({
@@ -83,7 +88,7 @@ export async function PUT(req, { params }) {
 export async function DELETE(req, { params }) {
     try {
         await connectDB();
-        const { id } = params;
+        const { id } = await params;
 
         const deletedService = await Service.findByIdAndDelete(id);
 

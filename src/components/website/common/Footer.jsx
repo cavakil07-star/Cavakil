@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa';
 
 export default function Footer() {
     const quickLinks = [
         { label: 'Home', href: '/' },
-        // { label: 'About Us', href: '/about' },
+        { label: 'About Us', href: '/about' },
         { label: 'Our Services', href: '/services' },
         { label: 'Why Choose Us', href: '/#why' },
         { label: 'Testimonials', href: '/#testimonials' },
@@ -29,10 +30,36 @@ export default function Footer() {
     ];
 
     const socialLinks = [
-        { name: 'Facebook', icon: 'M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z' },
-        { name: 'Twitter', icon: 'M22 5.924a8.008 8.008 0 0 1-2.357.646 4.11 4.11 0 0 0 1.804-2.27 8.169 8.169 0 0 1-2.606.996A4.096 4.096 0 0 0 15.847 4c-2.266 0-4.103 1.837-4.103 4.103 0 .322.036.635.106.935-3.41-.17-6.433-1.804-8.457-4.287a4.101 4.101 0 0 0-.554 2.062 4.1 4.1 0 0 0 1.825 3.415 4.09 4.09 0 0 1-1.859-.513v.052a4.104 4.104 0 0 0 3.292 4.023 4.099 4.099 0 0 1-1.853.07 4.11 4.11 0 0 0 3.833 2.85A8.261 8.261 0 0 1 2 18.282a11.587 11.587 0 0 0 6.29 1.84c7.547 0 11.673-6.252 11.673-11.673 0-.178-.004-.355-.012-.531A8.33 8.33 0 0 0 22 5.924z' },
-        { name: 'Instagram', icon: 'M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z' },
-        { name: 'LinkedIn', icon: 'M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z' },
+        { 
+            name: 'Facebook', 
+            icon: FaFacebook, 
+            url: 'https://facebook.com',
+            color: 'hover:bg-[#1877F2]'
+        },
+        { 
+            name: 'Twitter', 
+            icon: FaTwitter, 
+            url: 'https://twitter.com',
+            color: 'hover:bg-[#1DA1F2]'
+        },
+        { 
+            name: 'Instagram', 
+            icon: FaInstagram, 
+            url: 'https://www.instagram.com/ca.vakil?igsh=Ynl4ajJ2b2JqZnJ1&utm_source=qr',
+            color: 'hover:bg-gradient-to-r hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#FCAF45]'
+        },
+        { 
+            name: 'LinkedIn', 
+            icon: FaLinkedin, 
+            url: 'https://linkedin.com',
+            color: 'hover:bg-[#0A66C2]'
+        },
+        { 
+            name: 'YouTube', 
+            icon: FaYoutube, 
+            url:'https://www.youtube.com/@CAVakil',
+            color: 'hover:bg-[#FF0000]'
+        },
     ];
 
     return (
@@ -50,7 +77,7 @@ export default function Footer() {
                                         alt="Legal Services Logo"
                                         layout="fill"
                                         objectFit="contain"
-                                        className="filter brightness-0 invert"
+                                        className="filter rounded-lg"
                                     />
                                 </div>
                             </div>
@@ -191,23 +218,47 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom section */}
-                {/* Bottom section */}
-                <div className="border-t border-[#0055aa] pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <div className="text-gray-300 text-sm">
-                        © {new Date().getFullYear()} CA Vakil. All rights reserved.
+                <div className="border-t border-[#0055aa] pt-8">
+                    {/* Social Media Section */}
+                    <div className="flex flex-col items-center mb-6">
+                        <h4 className="text-lg font-semibold mb-4">Follow Us</h4>
+                        <div className="flex flex-wrap justify-center gap-3">
+                            {socialLinks.map((social) => {
+                                const IconComponent = social.icon;
+                                return (
+                                    <a
+                                        key={social.name}
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`group bg-[#0055aa] p-3.5 rounded-full transition-all duration-300 transform hover:scale-110 hover:shadow-lg ${social.color}`}
+                                        aria-label={social.name}
+                                    >
+                                        <IconComponent className="h-5 w-5 text-white" />
+                                    </a>
+                                );
+                            })}
+                        </div>
                     </div>
 
-                    {/* <div className="text-sm text-gray-400">
-                        Developed by{" "}
-                        <a
-                            href="https://matchbestsoftware.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="hover:text-white text-[#E7F7FF] transition-colors font-semibold no-underline"
-                        >
-                            Matchbest Software
-                        </a>
-                    </div> */}
+                    {/* Copyright */}
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-6 border-t border-[#0055aa]/50">
+                        <div className="text-gray-300 text-sm text-center md:text-left">
+                            © {new Date().getFullYear()} CA Vakil. All rights reserved.
+                        </div>
+
+                        {/* <div className="text-sm text-gray-400">
+                            Developed by{" "}
+                            <a
+                                href="https://matchbestsoftware.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-white text-[#E7F7FF] transition-colors font-semibold no-underline"
+                            >
+                                Matchbest Software
+                            </a>
+                        </div> */}
+                    </div>
                 </div>
 
 

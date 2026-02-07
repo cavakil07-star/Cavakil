@@ -71,10 +71,15 @@ export default function Contact() {
                                     <div className="ml-4">
                                         <h4 className="font-bold text-gray-800 mb-1">Phone</h4>
                                         <p className="text-gray-600">+91 7696 000 201</p>
-                                        <div className="mt-2 flex items-center text-sm text-green-600">
-                                            <FaWhatsapp className="mr-2" />
+                                        <a 
+                                            href="https://wa.me/917696000201?text=Hello!%20I%20would%20like%20to%20inquire%20about%20your%20services."
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="mt-2 flex items-center text-sm text-green-600 hover:text-green-700 hover:underline transition-all duration-200 cursor-pointer group"
+                                        >
+                                            <FaWhatsapp className="mr-2 group-hover:scale-110 transition-transform" />
                                             <span>Available on WhatsApp</span>
-                                        </div>
+                                        </a>
                                     </div>
                                 </div>
 

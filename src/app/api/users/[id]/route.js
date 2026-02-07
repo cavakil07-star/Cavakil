@@ -10,9 +10,9 @@ import SubService from "@/models/subServiceModel";
 import CallPlan from "@/models/callPlanModel";
 
 export async function GET(req, { params }) {
+    const { id } = await params;
 
     await connectDB();
-    const { id } = params;
 
     try {
         const user = await User.findById(id)
@@ -37,6 +37,7 @@ export async function GET(req, { params }) {
 }
 
 export async function PATCH(req, { params }) {
+    const { id } = await params;
     const errorResponse = await requirePermissionApi(req, Resources.USERS, Actions.EDIT);
     if (errorResponse) return errorResponse;
 
@@ -44,7 +45,7 @@ export async function PATCH(req, { params }) {
     try {
         const updates = await req.json();
 
-        const user = await User.findByIdAndUpdate(params.id, updates, { new: true });
+        const user = await User.findByIdAndUpdate(id, updates, { new: true });
         if (!user) {
             return Response.json({ success: false, message: 'User not found' }, { status: 404 });
         }
@@ -54,13 +55,14 @@ export async function PATCH(req, { params }) {
     }
 }
 
-export async function DELETE(_, { params }) {
+export async function DELETE(req, { params }) {
+    const { id } = await params;
     const errorResponse = await requirePermissionApi(req, Resources.USERS, Actions.DELETE);
     if (errorResponse) return errorResponse;
 
     await connectDB();
     try {
-        const user = await User.findByIdAndDelete(params.id);
+        const user = await User.findByIdAndDelete(id);
         if (!user) {
             return Response.json({ success: false, message: 'User not found' }, { status: 404 });
         }

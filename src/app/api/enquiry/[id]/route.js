@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(req, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         await connectDB()
         const enquiry = await Enquiry.findById(id);
         if (!enquiry) {
@@ -25,7 +25,7 @@ export async function GET(req, { params }) {
 
 export async function DELETE(request, { params }) {
     try {
-        const { id } = params;
+        const { id } = await params;
         await connectDB();
 
         const deletedEnquiry = await Enquiry.findByIdAndDelete(id);

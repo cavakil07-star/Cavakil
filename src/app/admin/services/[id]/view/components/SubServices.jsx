@@ -1,7 +1,7 @@
 "use client";
 import DeleteConfirmationDialog from '@/components/DeleteConfirmationDialog ';
 import { Button } from '@/components/ui/button';
-import { Trash } from 'lucide-react';
+import { Trash, CheckCircle2, XCircle } from 'lucide-react';
 import { useState } from 'react';
 
 const TabbedDocuments = ({ ss, setIsDialogOpen, setEditing, onDelete, isDeleting, deleteError }) => {
@@ -73,7 +73,17 @@ const TabbedDocuments = ({ ss, setIsDialogOpen, setEditing, onDelete, isDeleting
                     <div>
                         <h2 className="text-2xl font-semibold text-gray-800">{tabs[activeTab]?.title}</h2>
                         <div className="text-sm text-gray-500 mt-1">
-                            {tabs[activeTab]?.requiredDocuments.length} Documents &bull; {tabs[activeTab]?.requiredDetails.length} Details
+                            {tabs[activeTab]?.requiredDocuments?.length || 0} Documents &bull; {tabs[activeTab]?.requiredDetails?.length || 0} Details &bull; {tabs[activeTab]?.benefits?.length || 0} Benefits
+                        </div>
+                        <div className="flex items-center gap-4 mt-2 text-xs">
+                            <span className={`flex items-center gap-1 ${tabs[activeTab]?.isDocumentsRequired !== false ? 'text-green-600' : 'text-gray-400'}`}>
+                                {tabs[activeTab]?.isDocumentsRequired !== false ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+                                Docs Required
+                            </span>
+                            <span className={`flex items-center gap-1 ${tabs[activeTab]?.isDetailsRequired !== false ? 'text-green-600' : 'text-gray-400'}`}>
+                                {tabs[activeTab]?.isDetailsRequired !== false ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+                                Details Required
+                            </span>
                         </div>
                     </div>
                     <div className='flex gap-4'>
@@ -107,9 +117,28 @@ const TabbedDocuments = ({ ss, setIsDialogOpen, setEditing, onDelete, isDeleting
                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm">
                         <h3 className="text-lg font-medium text-gray-700 mb-3">Required Details</h3>
                         <ul className="list-disc list-inside text-gray-600 space-y-1">
-                            {tabs[activeTab]?.requiredDetails.map((det, idx) => (
+                            {tabs[activeTab]?.requiredDetails?.map((det, idx) => (
                                 <li key={idx}>{det.name}</li>
                             ))}
+                            {(!tabs[activeTab]?.requiredDetails || tabs[activeTab]?.requiredDetails.length === 0) && (
+                                <li className="text-gray-400 italic list-none">No details required</li>
+                            )}
+                        </ul>
+                    </div>
+
+                    {/* Benefits Card */}
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-4 shadow-sm md:col-span-2">
+                        <h3 className="text-lg font-medium text-green-700 mb-3">Service Benefits</h3>
+                        <ul className="grid md:grid-cols-2 gap-2 text-gray-600">
+                            {tabs[activeTab]?.benefits?.map((benefit, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                    <CheckCircle2 size={16} className="text-green-500 mt-0.5 shrink-0" />
+                                    {benefit}
+                                </li>
+                            ))}
+                            {(!tabs[activeTab]?.benefits || tabs[activeTab]?.benefits.length === 0) && (
+                                <li className="text-gray-400 italic">No benefits added</li>
+                            )}
                         </ul>
                     </div>
                 </div>

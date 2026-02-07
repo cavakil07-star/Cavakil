@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 export async function GET(req, { params }) {
     try {
         await connectDB();
-        const { slug } = params;
+        const { slug } = await params;
         const service = await Service.findOne({ slug })
             .populate('categories')
             .populate('tags')

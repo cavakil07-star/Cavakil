@@ -54,7 +54,7 @@ export const ConnectWithLawyer = () => {
                                     </svg>
                                 </div>
                                 <div>
-                                    <p className="font-bold text-gray-800">15+ Years</p>
+                                    <p className="font-bold text-gray-800">25+ Years</p>
                                     <p className="text-xs text-gray-500">Experience</p>
                                 </div>
                             </div>
@@ -86,7 +86,7 @@ export const ConnectWithLawyer = () => {
                         <h2 className="text-4xl md:text-5xl font-bold text-gray-800 leading-tight mb-6">
                             Connect with our <br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">
-                                Advocate/ CA/ Taxation Experts
+                                Advocate/ CA/CS Taxation Experts
                             </span>
                         </h2>
 

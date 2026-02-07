@@ -14,20 +14,20 @@ const CategoriesBox = ({ categories, selectedCategory, onSelectCategory }) => {
                 </div>
 
                 <ul className="space-y-2">
-                    {/* All Categories */}
+                    {/* All Services Option */}
                     <motion.li whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <button
-                            onClick={() => onSelectCategory('all')}
-                            className={`w-full text-left px-4 py-3 rounded-sm transition-all duration-300 flex items-center gap-2 ${selectedCategory === 'all'
+                            onClick={() => onSelectCategory('show-all-services')}
+                            className={`w-full text-left px-4 py-3 rounded-sm transition-all duration-300 flex items-center gap-2 ${selectedCategory === 'show-all-services'
                                 ? 'bg-gradient-to-r from-[#0A3460] to-[#1e5a9e] text-white shadow-sm'
                                 : 'text-[#0A3460] hover:bg-[#f0f5ff]'
                                 }`}
                         >
                             <span
-                                className={`w-2 h-2 rounded-full ${selectedCategory === 'all' ? 'bg-white' : 'bg-[#0A3460]'
+                                className={`w-2 h-2 rounded-full ${selectedCategory === 'show-all-services' ? 'bg-white' : 'bg-[#0A3460]'
                                     }`}
                             ></span>
-                            <span className="font-medium">All Categories</span>
+                            <span className="font-medium">All Services</span>
                         </button>
                     </motion.li>
 

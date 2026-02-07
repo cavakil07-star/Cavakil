@@ -224,16 +224,11 @@ const GSTBill = ({ data }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
-                <Text style={styles.watermark}>ORIGINAL COPY</Text>
-
-                {/* Header */}
                 <View style={styles.header}>
                     <View style={styles.sellerDetails}>
-                        <Text style={{ ...styles.heading, marginTop: 0 }}>CA Vakeel</Text>
-                        <Text>#50, Legal Street</Text>
-                        <Text>New Delhi 110065</Text>
-                        <Text>Contact: 88888888 | Email: cavakeel@gmail.com</Text>
-                        <Text style={styles.bold}>GSTIN: 07AGSPC8834B1HI</Text>
+                        <Text style={{ ...styles.heading, marginTop: 0 }}>CA Vakil</Text>
+                        <Text>Address: 123 Legal Lane, Justice City, 110001</Text>
+                        <Text>Contact: 88888888 | Email: cavakil@gmail.com</Text>
                     </View>
 
                     <View style={styles.invoiceDetails}>
@@ -359,7 +354,8 @@ const GSTBill = ({ data }) => {
                 {/* Footer */}
                 <View style={styles.footer}>
                     <Text>This is a computer generated invoice and does not require signature</Text>
-                    <Text>For CA VAKEEL</Text>
+                    <Text>Thank you for your business!</Text>
+                    <Text>For CA VAKIL</Text>
                 </View>
             </Page>
         </Document>

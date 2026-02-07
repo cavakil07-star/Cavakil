@@ -8,6 +8,12 @@ export async function POST(req) {
     try {
         await connectDB();
         const body = await req.json();
+        
+        // Ensure displayOrder is a number if provided
+        if (body.displayOrder !== undefined) {
+            body.displayOrder = parseInt(body.displayOrder, 10);
+        }
+        
         const newService = await Service.create(body);
 
         return NextResponse.json(

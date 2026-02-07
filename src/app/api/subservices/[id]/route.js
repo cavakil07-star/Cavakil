@@ -22,8 +22,8 @@ export async function GET(req) {
 }
 
 // app/api/subservices/[id]/route.js
-export async function PUT(req, context) {
-    const { id } = context.params;
+export async function PUT(req, { params }) {
+    const { id } = await params;
 
     try {
         const data = await req.json();
@@ -61,10 +61,11 @@ export async function PUT(req, context) {
 
 // DELETE a sub-service by ID
 export async function DELETE(req, { params }) {
+    const { id } = await params;
     await connectDB();
 
     try {
-        const deleted = await SubService.findByIdAndDelete(params.id);
+        const deleted = await SubService.findByIdAndDelete(id);
         if (!deleted) {
             return NextResponse.json({ message: 'Sub-service not found' }, { status: 404 });
         }

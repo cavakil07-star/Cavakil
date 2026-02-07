@@ -31,6 +31,7 @@ export default function ServiceForm({ defaultValues, onSubmit, loading, error })
             categories: [],
             tags: [],
             status: true,
+            displayOrder: 99,
             pageHeading: '',
             serviceTypeDetails: [''],
             serviceBigDescription: [
@@ -58,6 +59,7 @@ export default function ServiceForm({ defaultValues, onSubmit, loading, error })
             'categories',
             'tags',
             'status',
+            'displayOrder',
         ],
         ['pageHeading', 'serviceTypeDetails'],
         ['serviceBigDescription'],

@@ -25,6 +25,7 @@ export const ServiceFormSchema = z.object({
         .array(z.string())
         .min(1, 'Select at least one tag'),
     status: z.boolean(),
+    displayOrder: z.number().int().min(0, 'Display order must be a positive number').optional(),
     // featured: z.boolean(),
 
     // Step 2 fields

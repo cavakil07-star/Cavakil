@@ -20,6 +20,18 @@ const subServiceSchema = new mongoose.Schema({
         label: { type: String, required: true, trim: true },
         name: { type: String, required: true, trim: true },
     }],
+    isDocumentsRequired: {
+        type: Boolean,
+        default: true
+    },
+    isDetailsRequired: {
+        type: Boolean,
+        default: true
+    },
+    benefits: [{
+        type: String,
+        trim: true
+    }],
     actualPrice: {
         type: Number,
         required: true,
