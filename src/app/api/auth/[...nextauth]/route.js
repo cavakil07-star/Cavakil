@@ -96,5 +96,14 @@ const authConfig = {
     trustHost: true,
 };
 
-const { handlers } = NextAuth(authConfig);
-export const { GET, POST } = handlers;
+// Create NextAuth instance
+const nextAuth = NextAuth(authConfig);
+
+// Export handlers explicitly to avoid Turbopack destructuring issues
+export async function GET(request) {
+    return nextAuth.handlers.GET(request);
+}
+
+export async function POST(request) {
+    return nextAuth.handlers.POST(request);
+}
