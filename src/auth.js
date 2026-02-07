@@ -1,13 +1,9 @@
 // src/auth.js - Auth.js v5 configuration
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { MongoDBAdapter } from '@auth/mongodb-adapter';
-import clientPromise from '@/lib/mongodbClient';
-import User from '@/models/userModel';
-import bcrypt from 'bcryptjs';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-    adapter: MongoDBAdapter(clientPromise),
+    // No adapter needed for JWT sessions
     session: { strategy: 'jwt' },
     providers: [
         Credentials({
@@ -19,7 +15,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             },
             async authorize(credentials) {
                 const { email, password } = credentials;
-                await import('@/lib/mongodb').then(m => m.connectDB());
+                const { connectDB } = await import('@/lib/mongodb');
+                await connectDB();
+                const User = (await import('@/models/userModel')).default;
+                const bcrypt = (await import('bcryptjs')).default;
+                
                 const user = await User.findOne({ email }).select('+password');
                 if (!user) throw new Error('No user found');
                 if (!["admin", "sub-admin"].includes(user.role)) throw new Error("Not authorized");
@@ -39,7 +39,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             async authorize(credentials) {
                 const { phone, sessionId, otp } = credentials;
                 try {
-                    await import('@/lib/mongodb').then(m => m.connectDB());
+                    const { connectDB } = await import('@/lib/mongodb');
+                    await connectDB();
+                    const User = (await import('@/models/userModel')).default;
+                    
                     console.log(sessionId);
                     console.log(otp);
                     // Validate phone format
