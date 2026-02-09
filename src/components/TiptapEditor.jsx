@@ -7,7 +7,14 @@ import Image from '@tiptap/extension-image';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
-import TurndownService from 'turndown';
+import { Table } from '@tiptap/extension-table';
+import { TableRow } from '@tiptap/extension-table-row';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { Color } from '@tiptap/extension-color';
+import { TextStyle } from '@tiptap/extension-text-style';
+// Convert HTML to Markdown (Removed as we now save HTML directly)
+// import TurndownService from 'turndown';
 import {
     Bold,
     Italic,
@@ -24,17 +31,21 @@ import {
     AlignLeft,
     AlignCenter,
     AlignRight,
+    AlignJustify,
     Heading1,
     Heading2,
     Heading3,
     Minus,
+    Table as TableIcon,
+    Palette,
+    PaintBucket,
+    Maximize2,
 } from 'lucide-react';
 
-// Convert HTML to Markdown
-const turndownService = new TurndownService({
+/* const turndownService = new TurndownService({
     headingStyle: 'atx',
     codeBlockStyle: 'fenced',
-});
+}); */
 
 // Toolbar Button Component
 const ToolbarButton = ({ onClick, isActive, disabled, children, title }) => (
@@ -65,6 +76,45 @@ const Toolbar = ({ editor }) => {
         const url = window.prompt('Enter image URL:');
         if (url) {
             editor.chain().focus().setImage({ src: url }).run();
+        }
+    };
+
+    const addTextColor = () => {
+        const color = window.prompt('Enter color (e.g., #ff0000 or red):');
+        if (color) {
+            editor.chain().focus().setColor(color).run();
+        }
+    };
+
+    const insertTableWithSize = () => {
+        const rows = window.prompt('Enter number of rows:', '3');
+        const cols = window.prompt('Enter number of columns:', '3');
+        if (rows && cols) {
+            const numRows = parseInt(rows);
+            const numCols = parseInt(cols);
+            if (numRows > 0 && numCols > 0 && numRows <= 20 && numCols <= 20) {
+                editor.chain().focus().insertTable({ rows: numRows, cols: numCols, withHeaderRow: true }).run();
+            } else {
+                alert('Please enter valid numbers between 1 and 20');
+            }
+        }
+    };
+
+    const setCellBackgroundColor = () => {
+        const color = window.prompt('Enter cell background color (e.g., #ffff00 or yellow):');
+        if (color) {
+            editor.chain().focus().setCellAttribute('backgroundColor', color).run();
+        }
+    };
+
+    const setCellAlignment = (alignment) => {
+        editor.chain().focus().setCellAttribute('textAlign', alignment).run();
+    };
+
+    const setCellWidth = () => {
+        const width = window.prompt('Enter cell width (e.g., 100px, 20%, or auto):');
+        if (width) {
+            editor.chain().focus().setCellAttribute('width', width).run();
         }
     };
 
@@ -204,6 +254,127 @@ const Toolbar = ({ editor }) => {
                 </ToolbarButton>
             </div>
 
+            {/* Text Color */}
+            <div className="flex items-center border-r border-gray-300 pr-2 mr-2">
+                <ToolbarButton
+                    onClick={addTextColor}
+                    title="Text Color"
+                >
+                    <Palette size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().unsetColor().run()}
+                    title="Remove Color"
+                >
+                    <span className="text-xs font-bold">✗</span>
+                </ToolbarButton>
+            </div>
+
+            {/* Table */}
+            <div className="flex items-center border-r border-gray-300 pr-2 mr-2">
+                <ToolbarButton
+                    onClick={insertTableWithSize}
+                    title="Insert Table (Custom Size)"
+                >
+                    <TableIcon size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().addColumnBefore().run()}
+                    disabled={!editor.can().addColumnBefore()}
+                    title="Add Column Before"
+                >
+                    <span className="text-xs font-bold">⬅+</span>
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().addColumnAfter().run()}
+                    disabled={!editor.can().addColumnAfter()}
+                    title="Add Column After"
+                >
+                    <span className="text-xs font-bold">➡+</span>
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().deleteColumn().run()}
+                    disabled={!editor.can().deleteColumn()}
+                    title="Delete Column"
+                >
+                    <span className="text-xs font-bold">⬇✗</span>
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().addRowBefore().run()}
+                    disabled={!editor.can().addRowBefore()}
+                    title="Add Row Before"
+                >
+                    <span className="text-xs font-bold">⬆+</span>
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().addRowAfter().run()}
+                    disabled={!editor.can().addRowAfter()}
+                    title="Add Row After"
+                >
+                    <span className="text-xs font-bold">⬇+</span>
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().deleteRow().run()}
+                    disabled={!editor.can().deleteRow()}
+                    title="Delete Row"
+                >
+                    <span className="text-xs font-bold">➡✗</span>
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => editor.chain().focus().deleteTable().run()}
+                    disabled={!editor.can().deleteTable()}
+                    title="Delete Table"
+                >
+                    <span className="text-xs font-bold">🗑</span>
+                </ToolbarButton>
+            </div>
+
+            {/* Cell Styling */}
+            <div className="flex items-center border-r border-gray-300 pr-2 mr-2">
+                <ToolbarButton
+                    onClick={() => setCellAlignment('left')}
+                    disabled={!editor.can().setCellAttribute('textAlign', 'left')}
+                    title="Align Cell Left"
+                >
+                    <AlignLeft size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => setCellAlignment('center')}
+                    disabled={!editor.can().setCellAttribute('textAlign', 'center')}
+                    title="Align Cell Center"
+                >
+                    <AlignCenter size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => setCellAlignment('right')}
+                    disabled={!editor.can().setCellAttribute('textAlign', 'right')}
+                    title="Align Cell Right"
+                >
+                    <AlignRight size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={() => setCellAlignment('justify')}
+                    disabled={!editor.can().setCellAttribute('textAlign', 'justify')}
+                    title="Justify Cell"
+                >
+                    <AlignJustify size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={setCellBackgroundColor}
+                    disabled={!editor.can().setCellAttribute('backgroundColor', '#ffffff')}
+                    title="Cell Background Color"
+                >
+                    <PaintBucket size={18} />
+                </ToolbarButton>
+                <ToolbarButton
+                    onClick={setCellWidth}
+                    disabled={!editor.can().setCellAttribute('width', '100px')}
+                    title="Set Cell Width"
+                >
+                    <Maximize2 size={18} />
+                </ToolbarButton>
+            </div>
+
             {/* Undo/Redo */}
             <div className="flex items-center">
                 <ToolbarButton
@@ -228,6 +399,7 @@ const Toolbar = ({ editor }) => {
 // Main TipTap Editor Component
 function TiptapEditor({ name, content, setValue, height = '400px' }) {
     const editor = useEditor({
+        immediatelyRender: false,
         extensions: [
             StarterKit.configure({
                 heading: {
@@ -252,6 +424,69 @@ function TiptapEditor({ name, content, setValue, height = '400px' }) {
             Placeholder.configure({
                 placeholder: 'Start writing...',
             }),
+            // Text Color Extensions
+            TextStyle,
+            Color,
+            // Table Extensions
+            Table.configure({
+                resizable: true,
+                HTMLAttributes: {
+                    class: 'border-collapse table-auto w-full my-4',
+                },
+            }),
+            TableRow,
+            TableHeader.configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300 bg-gray-100 font-bold p-2',
+                },
+            }),
+            TableCell.extend({
+                addAttributes() {
+                    return {
+                        ...this.parent?.(),
+                        backgroundColor: {
+                            default: null,
+                            parseHTML: element => element.style.backgroundColor,
+                            renderHTML: attributes => {
+                                if (!attributes.backgroundColor) {
+                                    return {};
+                                }
+                                return {
+                                    style: `background-color: ${attributes.backgroundColor}`,
+                                };
+                            },
+                        },
+                        textAlign: {
+                            default: null,
+                            parseHTML: element => element.style.textAlign,
+                            renderHTML: attributes => {
+                                if (!attributes.textAlign) {
+                                    return {};
+                                }
+                                return {
+                                    style: `text-align: ${attributes.textAlign}`,
+                                };
+                            },
+                        },
+                        width: {
+                            default: null,
+                            parseHTML: element => element.style.width,
+                            renderHTML: attributes => {
+                                if (!attributes.width) {
+                                    return {};
+                                }
+                                return {
+                                    style: `width: ${attributes.width}`,
+                                };
+                            },
+                        },
+                    };
+                },
+            }).configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300 p-2',
+                },
+            }),
         ],
         content: content || '',
         editorProps: {
@@ -261,13 +496,13 @@ function TiptapEditor({ name, content, setValue, height = '400px' }) {
             },
         },
         onUpdate: ({ editor }) => {
-            // Convert HTML to Markdown
+            // Save as HTML to preserve all rich text features (colors, tables, etc.)
             const html = editor.getHTML();
-            const markdown = turndownService.turndown(html);
+
             if (name) {
-                setValue(name, markdown, { shouldValidate: true, shouldDirty: true });
+                setValue(name, html, { shouldValidate: true, shouldDirty: true });
             } else {
-                setValue('content', markdown, { shouldValidate: true, shouldDirty: true });
+                setValue('content', html, { shouldValidate: true, shouldDirty: true });
             }
         },
     });
@@ -275,9 +510,10 @@ function TiptapEditor({ name, content, setValue, height = '400px' }) {
     // Update editor content when content prop changes
     useEffect(() => {
         if (editor && content !== undefined) {
-            const currentContent = turndownService.turndown(editor.getHTML());
+            // Compare HTML to prevent loop
+            const currentContent = editor.getHTML();
             if (content !== currentContent) {
-                // Convert markdown to HTML for TipTap
+                // TipTap handles both HTML and Markdown input automatically
                 editor.commands.setContent(content || '');
             }
         }

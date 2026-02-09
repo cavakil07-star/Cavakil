@@ -19,7 +19,7 @@ function BlogData({ blog }) {
                     />
                 )}
             </div>
-            <div className={`px-3 rounded-md ${styles.postStyle}`}>
+            <div className={`px-3 rounded-md prose prose-lg max-w-none ${styles.postStyle}`}>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{blog.content}</ReactMarkdown>
             </div>
         </section>
