@@ -96,14 +96,20 @@ const authConfig = {
     trustHost: true,
 };
 
-// Create NextAuth instance
-const nextAuth = NextAuth(authConfig);
+// Lazy initialization - handlers created at request time, not module load time
+let _handlers = null;
 
-// Export handlers explicitly to avoid Turbopack destructuring issues
+function getHandlers() {
+    if (!_handlers) {
+        _handlers = NextAuth(authConfig).handlers;
+    }
+    return _handlers;
+}
+
 export async function GET(request) {
-    return nextAuth.handlers.GET(request);
+    return getHandlers().GET(request);
 }
 
 export async function POST(request) {
-    return nextAuth.handlers.POST(request);
+    return getHandlers().POST(request);
 }

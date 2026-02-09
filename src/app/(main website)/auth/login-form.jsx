@@ -224,7 +224,7 @@ export const LoginForm = () => {
           </button>
         </form>
 
-        <div className="mt-8 text-center">
+        {/* <div className="mt-8 text-center">
           <p className="text-sm text-gray-600">
             {variant === 'LOGIN' ? "Don't have an account? " : "Already have an account? "}
             <button 
@@ -234,7 +234,7 @@ export const LoginForm = () => {
               {variant === 'LOGIN' ? 'Create account' : 'Log in'}
             </button>
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
