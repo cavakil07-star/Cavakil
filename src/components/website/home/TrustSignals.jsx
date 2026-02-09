@@ -38,12 +38,7 @@ const TrustSignals = () => {
       reviews: "1,200+ Reviews",
       verified: true
     },
-    {
-      name: "Government Approved",
-      rating: "Licensed",
-      reviews: "MCA Registered",
-      verified: true
-    }
+  
   ]
 
   useEffect(() => {
