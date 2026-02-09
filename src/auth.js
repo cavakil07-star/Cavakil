@@ -1,7 +1,4 @@
-// src/auth.js - Auth helpers for next-auth v5
-// Note: authOptions is defined in route.js to avoid circular imports
+// src/auth.js - Re-export authOptions for use in other files
+// Note: Main auth config is in app/api/auth/[...nextauth]/route.js
 
-// Empty placeholder - all auth logic is in route.js
-export const authOptions = {
-    providers: [],
-};
+export { authOptions } from '@/app/api/auth/[...nextauth]/route';
