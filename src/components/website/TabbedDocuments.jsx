@@ -221,7 +221,7 @@ const TabbedDocuments = ({ subServices }) => {
                                                     </div>
                                                 )}
                                             </div>
-                                            <p className="text-gray-400 text-xs mt-2">* Excluding government fees if applicable</p>
+                                            <p className="text-gray-400 text-xs mt-2">* Excluding government and GST fees if applicable</p>
                                         </div>
 
                                         <Link href={`/getService/${currentTab._id}`}>

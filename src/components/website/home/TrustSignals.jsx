@@ -286,13 +286,13 @@ const TrustSignals = () => {
                     Start Your Legal Journey
                   </Button>
                 </Link>
-                <Button
+                {/* <Button
                   variant="outline"
                   size="lg"
                   className="text-white border-white hover:bg-white hover:text-blue-600 w-full sm:w-auto"
                 >
                   View All Reviews
-                </Button>
+                </Button> */}
               </div>
             </CardContent>
           </Card>

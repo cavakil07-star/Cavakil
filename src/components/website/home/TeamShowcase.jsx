@@ -56,7 +56,7 @@ function TeamShowcase() {
             </p>
           </div>
           <div className="text-sm text-slate-700">
-            15+ years of collective leadership across law, tax, and disputes.
+            25+ years of collective leadership across law, tax, and disputes.
           </div>
         </div>
 

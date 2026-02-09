@@ -250,7 +250,7 @@ const FAQSection = () => {
                     <Mail className="w-5 h-5 text-gray-600" />
                     <div>
                       <p className="font-medium text-gray-900">Email Support</p>
-                      <p className="text-sm text-gray-600">baggarajiv@gmail.com</p>
+                      <p className="text-sm text-gray-600">support@cavakil.com</p>
                     </div>
                   </div>
                   

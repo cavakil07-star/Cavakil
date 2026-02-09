@@ -1,13 +1,20 @@
 import Image from "next/image";
+import NavBar from "@/components/website/common/Navbar";
+import { getCategories, getServices } from "@/lib/main/getHomePageData";
 
 export const metadata = {
   title: "CA Vakil",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+   const servicesData = await getServices();
+    const services = servicesData?.data || [];
+    const categoriesData = await getCategories();
+    const categories = categoriesData?.data || [];
   return (
     <section className="pt-24 pb-20 bg-gradient-to-b from-[#f8fbff] via-[#eef4ff] to-[#eaf2ff]">
       <div className="max-w-7xl mx-auto px-4">
+        <NavBar services={services} categories={categories} />
         {/* Hero */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm">

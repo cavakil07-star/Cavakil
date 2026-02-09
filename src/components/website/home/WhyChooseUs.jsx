@@ -46,7 +46,7 @@ export default function WhyChooseUs() {
             color: "from-purple-500 to-fuchsia-500"
         },
         {
-            title: "Expert CS Support",
+            title: "Expert CA,Advocate, CS Support",
             description: "Work with qualified professionals",
             icon: <FaUserTie className="text-2xl" />,
             color: "from-cyan-500 to-sky-500"
