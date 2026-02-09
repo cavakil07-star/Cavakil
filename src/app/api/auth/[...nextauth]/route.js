@@ -1,75 +1,9 @@
 // app/api/auth/[...nextauth]/route.js
-import NextAuth from 'next-auth';
-import Credentials from 'next-auth/providers/credentials';
+// Dynamic imports to avoid Vercel cold start issues with next-auth v5 beta
 
 const authConfig = {
     session: { strategy: 'jwt' },
-    providers: [
-        Credentials({
-            id: 'credentials',
-            name: 'credentials',
-            credentials: {
-                email: { label: 'Email', type: 'email' },
-                password: { label: 'Password', type: 'password' }
-            },
-            async authorize(credentials) {
-                const { email, password } = credentials;
-                const { connectDB } = await import('@/lib/mongodb');
-                await connectDB();
-                const User = (await import('@/models/userModel')).default;
-                const bcrypt = (await import('bcryptjs')).default;
-                
-                const user = await User.findOne({ email }).select('+password');
-                if (!user) throw new Error('No user found');
-                if (!["admin", "sub-admin"].includes(user.role)) throw new Error("Not authorized");
-                const valid = await bcrypt.compare(password, user.password);
-                if (!valid) throw new Error('Invalid credentials');
-                return { id: user._id.toString(), role: user.role, phone: user.phone };
-            }
-        }),
-        Credentials({
-            id: 'otp',
-            name: 'Phone OTP',
-            credentials: {
-                phone: { label: 'Phone', type: 'text' },
-                sessionId: { label: 'Session ID', type: 'text' },
-                otp: { label: 'OTP', type: 'text' }
-            },
-            async authorize(credentials) {
-                const { phone, sessionId, otp } = credentials;
-                try {
-                    const { connectDB } = await import('@/lib/mongodb');
-                    await connectDB();
-                    const User = (await import('@/models/userModel')).default;
-                    
-                    console.log(sessionId);
-                    console.log(otp);
-                    if (!phone || !/^\d{10}$/.test(phone)) {
-                        throw new Error('Invalid phone number');
-                    }
-
-                    let user = await User.findOne({ phone });
-
-                    if (user && user.role !== 'user') {
-                        throw new Error('Invalid user: Admin must use email login');
-                    }
-
-                    if (!user) {
-                        user = await User.create({ phone, role: 'user' });
-                    }
-
-                    return {
-                        id: user._id.toString(),
-                        role: user.role,
-                        phone: user.phone
-                    };
-                } catch (error) {
-                    console.error('OTP Auth Error:', error);
-                    throw new Error(error.message || 'Could not authenticate');
-                }
-            }
-        })
-    ],
+    providers: [], // Will be populated dynamically
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
@@ -96,20 +30,89 @@ const authConfig = {
     trustHost: true,
 };
 
-// Lazy initialization - handlers created at request time, not module load time
-let _handlers = null;
+async function createAuthHandler() {
+    const NextAuth = (await import('next-auth')).default;
+    const Credentials = (await import('next-auth/providers/credentials')).default;
+    
+    const config = {
+        ...authConfig,
+        providers: [
+            Credentials({
+                id: 'credentials',
+                name: 'credentials',
+                credentials: {
+                    email: { label: 'Email', type: 'email' },
+                    password: { label: 'Password', type: 'password' }
+                },
+                async authorize(credentials) {
+                    const { email, password } = credentials;
+                    const { connectDB } = await import('@/lib/mongodb');
+                    await connectDB();
+                    const User = (await import('@/models/userModel')).default;
+                    const bcrypt = (await import('bcryptjs')).default;
+                    
+                    const user = await User.findOne({ email }).select('+password');
+                    if (!user) throw new Error('No user found');
+                    if (!["admin", "sub-admin"].includes(user.role)) throw new Error("Not authorized");
+                    const valid = await bcrypt.compare(password, user.password);
+                    if (!valid) throw new Error('Invalid credentials');
+                    return { id: user._id.toString(), role: user.role, phone: user.phone };
+                }
+            }),
+            Credentials({
+                id: 'otp',
+                name: 'Phone OTP',
+                credentials: {
+                    phone: { label: 'Phone', type: 'text' },
+                    sessionId: { label: 'Session ID', type: 'text' },
+                    otp: { label: 'OTP', type: 'text' }
+                },
+                async authorize(credentials) {
+                    const { phone, sessionId, otp } = credentials;
+                    try {
+                        const { connectDB } = await import('@/lib/mongodb');
+                        await connectDB();
+                        const User = (await import('@/models/userModel')).default;
+                        
+                        console.log(sessionId);
+                        console.log(otp);
+                        if (!phone || !/^\d{10}$/.test(phone)) {
+                            throw new Error('Invalid phone number');
+                        }
 
-function getHandlers() {
-    if (!_handlers) {
-        _handlers = NextAuth(authConfig).handlers;
-    }
-    return _handlers;
+                        let user = await User.findOne({ phone });
+
+                        if (user && user.role !== 'user') {
+                            throw new Error('Invalid user: Admin must use email login');
+                        }
+
+                        if (!user) {
+                            user = await User.create({ phone, role: 'user' });
+                        }
+
+                        return {
+                            id: user._id.toString(),
+                            role: user.role,
+                            phone: user.phone
+                        };
+                    } catch (error) {
+                        console.error('OTP Auth Error:', error);
+                        throw new Error(error.message || 'Could not authenticate');
+                    }
+                }
+            })
+        ]
+    };
+    
+    return NextAuth(config);
 }
 
 export async function GET(request) {
-    return getHandlers().GET(request);
+    const { handlers } = await createAuthHandler();
+    return handlers.GET(request);
 }
 
 export async function POST(request) {
-    return getHandlers().POST(request);
+    const { handlers } = await createAuthHandler();
+    return handlers.POST(request);
 }
