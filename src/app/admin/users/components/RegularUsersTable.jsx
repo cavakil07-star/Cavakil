@@ -51,6 +51,7 @@ export default function RegularUsersTable({
                             <TableHead className={''}>S. No.</TableHead>
                             <TableHead>Name</TableHead>
                             <TableHead>Phone</TableHead>
+                            <TableHead>Email</TableHead>
                             <TableHead>Orders</TableHead>
                             <TableHead>Joined Date</TableHead>
                             <TableHead className="text-center">Actions</TableHead>
@@ -61,7 +62,8 @@ export default function RegularUsersTable({
                             <TableRow key={user._id}>
                                 <TableCell className={''}>{(page - 1) * users.length + idx + 1}</TableCell>
                                 <TableCell>{user.name || 'User'}</TableCell>
-                                <TableCell>{user.phone}</TableCell>
+                                <TableCell>{user.phone || '-'}</TableCell>
+                                <TableCell>{user.email || '-'}</TableCell>
                                 <TableCell>
                                     <span className="bg-gray-100 text-gray-800 rounded-full px-3 py-1 text-xs">
                                         {user.orders?.length || 0}

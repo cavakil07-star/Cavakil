@@ -5,7 +5,7 @@ const permissionSchema = new mongoose.Schema({
     add: { type: Boolean, default: false },
     edit: { type: Boolean, default: false },
     delete: { type: Boolean, default: false }
-}, 2);
+}, { _id: false });
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -17,13 +17,14 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: String,
-        required: true,
         unique: true,
+        sparse: true,
         trim: true
     },
     email: {
         type: String,
         unique: true,
+        sparse: true,
         lowercase: true,
         match: [/\S+@\S+\.\S+/, 'Please provide a valid email']
     },

@@ -43,33 +43,61 @@ export const authOptions = {
             name: 'Phone OTP',
             credentials: {
                 phone: { label: 'Phone', type: 'text' },
+                email: { label: 'Email', type: 'email' },
                 sessionId: { label: 'Session ID', type: 'text' },
                 otp: { label: 'OTP', type: 'text' }
             },
             async authorize(credentials) {
-                const { phone } = credentials;
+                const { phone, email } = credentials;
                 
                 try {
                     await connectDB();
                     
-                    if (!phone || !/^\d{10}$/.test(phone)) {
-                        throw new Error('Invalid phone number');
+                    // Validate: must have either phone or email
+                    if (!phone && !email) {
+                        throw new Error('Phone or email is required');
                     }
+                    
+                    let user;
+                    
+                    if (phone) {
+                        // Phone login flow
+                        if (!/^\d{10}$/.test(phone)) {
+                            throw new Error('Invalid phone number');
+                        }
 
-                    let user = await User.findOne({ phone });
+                        user = await User.findOne({ phone });
 
-                    if (user && user.role !== 'user') {
-                        throw new Error('Invalid user: Admin must use email login');
-                    }
+                        if (user && user.role !== 'user') {
+                            throw new Error('Invalid user: Admin must use email login');
+                        }
 
-                    if (!user) {
-                        user = await User.create({ phone, role: 'user' });
+                        if (!user) {
+                            user = await User.create({ phone, role: 'user' });
+                        }
+                    } else if (email) {
+                        // Email login flow
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(email)) {
+                            throw new Error('Invalid email address');
+                        }
+
+                        user = await User.findOne({ email });
+
+                        if (user && user.role !== 'user') {
+                            throw new Error('Invalid user: Admin must use email login');
+                        }
+
+                        if (!user) {
+                            user = await User.create({ email, role: 'user' });
+                        }
                     }
 
                     return {
                         id: user._id.toString(),
                         role: user.role,
-                        phone: user.phone
+                        phone: user.phone,
+                        email: user.email
                     };
                 } catch (error) {
                     console.error('OTP Auth Error:', error);
@@ -84,6 +112,7 @@ export const authOptions = {
                 token.id = user.id;
                 token.role = user.role;
                 token.phone = user.phone;
+                token.email = user.email;
                 token.permissions = user.permissions;
                 // Admin session: 30 minutes | User session: 30 days
                 const maxAge = user.role === 'user' ? 60 * 60 * 24 * 30 : 60 * 30;
@@ -95,7 +124,8 @@ export const authOptions = {
             session.user = {
                 id: token.id,
                 role: token.role,
-                phone: token.phone
+                phone: token.phone,
+                email: token.email
             };
             return session;
         }

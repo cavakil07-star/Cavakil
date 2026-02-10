@@ -51,8 +51,8 @@ export default function LoginMenu() {
         );
     }
 
-    const { role, phone } = session.user;
-    const displayName = phone;
+    const { role, phone, email } = session.user;
+    const displayName = phone || email || 'User';
 
     const getRoleColor = () => {
         switch (role) {
@@ -63,7 +63,9 @@ export default function LoginMenu() {
     };
 
     const getInitials = () => {
-        return phone.slice(-2);
+        if (phone) return phone.slice(-2);
+        if (email) return email.slice(0, 2).toUpperCase();
+        return 'U';
     };
 
     return (

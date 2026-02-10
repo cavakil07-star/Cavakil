@@ -1,61 +1,62 @@
 "use client";
 
 import React, { useState } from "react";
-import * as z from "zod";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 
-// Schema
-const authSchema = z.object({
-  email: z.string().email("Enter a valid email address"),
-  phone: z.string().regex(/^\d{10}$/, {
-    message: "Enter a valid 10-digit phone number",
-  }),
-});
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const AuthDialog = ({ open, onOpenChange }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [loginMethod, setLoginMethod] = useState("phone"); // "phone" or "email"
 
   const form = useForm({
-    resolver: zodResolver(authSchema),
-    defaultValues: {
-      email: "",
-      phone: "",
-    },
+    defaultValues: { phone: "", email: "" },
     mode: "onTouched",
   });
 
-  const handleSignIn = form.handleSubmit(async (values) => {
+  const handleSignIn = async (e) => {
+    e.preventDefault();
     setErrorMsg("");
+    
+    const values = form.getValues();
+    const identifier = loginMethod === "phone" ? values.phone : values.email;
+    
+    // Validate based on method
+    if (loginMethod === "phone" && !/^\d{10}$/.test(identifier)) {
+      setErrorMsg("Enter a valid 10-digit phone number");
+      return;
+    }
+    if (loginMethod === "email" && !emailRegex.test(identifier)) {
+      setErrorMsg("Enter a valid email address");
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
-      const result = await signIn("otp", {
+      const signInData = {
         redirect: false,
-        email: values.email,
-        phone: values.phone,
         sessionId: "ABCX",
         otp: "8568",
-      });
+      };
+      
+      if (loginMethod === "phone") {
+        signInData.phone = values.phone;
+      } else {
+        signInData.email = values.email;
+      }
+      
+      const result = await signIn("otp", signInData);
 
       if (result?.error) {
         setErrorMsg(result.error);
@@ -68,7 +69,13 @@ const AuthDialog = ({ open, onOpenChange }) => {
     } finally {
       setIsLoading(false);
     }
-  });
+  };
+
+  const handleMethodChange = (method) => {
+    setLoginMethod(method);
+    setErrorMsg("");
+    form.reset({ phone: "", email: "" });
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -131,7 +138,7 @@ const AuthDialog = ({ open, onOpenChange }) => {
                 <div className="mt-6 space-y-2 text-xs text-blue-100/80">
                   <p className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
-                    2-step verification via email & phone
+                    Login with phone or email
                   </p>
                   <p className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-sky-300" />
@@ -155,77 +162,65 @@ const AuthDialog = ({ open, onOpenChange }) => {
                     </span>
                   </DialogTitle>
                   <p className="mt-2 text-sm text-gray-500">
-                    Sign in with your registered email and phone number to continue.
+                    Sign in with your phone number or email to continue.
                   </p>
                 </DialogHeader>
 
-                <Form {...form}>
-                  <form onSubmit={handleSignIn} className="mt-6 space-y-5">
-                    {/* Email */}
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">
-                            Email Address
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="you@example.com"
-                              className="
-                                h-11
-                                rounded-xl
-                                border-gray-200
-                                bg-white/80
-                                text-sm
-                                shadow-sm
-                                transition-all
-                                duration-200
-                                focus-visible:ring-2
-                                focus-visible:ring-blue-500
-                                focus-visible:ring-offset-1
-                              "
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                <div className="mt-4 flex rounded-xl bg-gray-100 p-1">
+                  <button
+                    type="button"
+                    onClick={() => handleMethodChange("phone")}
+                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
+                      loginMethod === "phone"
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Phone
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleMethodChange("email")}
+                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
+                      loginMethod === "email"
+                        ? "bg-white text-gray-900 shadow-sm"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    Email
+                  </button>
+                </div>
 
-                    {/* Phone */}
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-sm font-medium text-gray-700">
-                            Phone Number
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              placeholder="8569856985"
-                              className="
-                                h-11
-                                rounded-xl
-                                border-gray-200
-                                bg-white/80
-                                text-sm
-                                shadow-sm
-                                transition-all
-                                duration-200
-                                focus-visible:ring-2
-                                focus-visible:ring-blue-500
-                                focus-visible:ring-offset-1
-                              "
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                {loginMethod === "phone" ? (
+                  <form onSubmit={handleSignIn} className="mt-6 space-y-5">
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        placeholder="8569856985"
+                        {...form.register("phone")}
+                        className="
+                          mt-1.5
+                          h-11
+                          w-full
+                          rounded-xl
+                          border
+                          border-gray-200
+                          bg-white/80
+                          px-3
+                          text-sm
+                          shadow-sm
+                          transition-all
+                          duration-200
+                          outline-none
+                          focus:ring-2
+                          focus:ring-blue-500
+                          focus:ring-offset-1
+                        "
+                      />
+                    </div>
 
                     <Button
                       type="submit"
@@ -269,7 +264,80 @@ const AuthDialog = ({ open, onOpenChange }) => {
                       </div>
                     )}
                   </form>
-                </Form>
+                ) : (
+                  <form onSubmit={handleSignIn} className="mt-6 space-y-5">
+                    <div>
+                      <label className="text-sm font-medium text-gray-700">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="you@example.com"
+                        {...form.register("email")}
+                        className="
+                          mt-1.5
+                          h-11
+                          w-full
+                          rounded-xl
+                          border
+                          border-gray-200
+                          bg-white/80
+                          px-3
+                          text-sm
+                          shadow-sm
+                          transition-all
+                          duration-200
+                          outline-none
+                          focus:ring-2
+                          focus:ring-blue-500
+                          focus:ring-offset-1
+                        "
+                      />
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
+                      className="
+                        relative
+                        mt-1
+                        flex
+                        h-11
+                        w-full
+                        items-center
+                        justify-center
+                        overflow-hidden
+                        rounded-xl
+                        text-sm
+                        font-medium
+                        tracking-wide
+                        text-white
+                        shadow-lg
+                        shadow-blue-500/30
+                        transition-all
+                        duration-200
+                        bg-gradient-to-r
+                        from-blue-600
+                        via-indigo-500
+                        to-blue-600
+                        hover:scale-[1.01]
+                        hover:shadow-xl
+                        hover:shadow-blue-500/40
+                        disabled:opacity-80
+                      "
+                    >
+                      <span className="relative z-10">
+                        {isLoading ? "Signing in..." : "Sign in securely"}
+                      </span>
+                    </Button>
+
+                    {errorMsg && (
+                      <div className="relative mt-2 rounded-xl border border-red-100 bg-red-50/80 px-4 py-3 text-sm text-red-600 shadow-sm">
+                        {errorMsg}
+                      </div>
+                    )}
+                  </form>
+                )}
               </div>
             </div>
           </div>
