@@ -118,6 +118,20 @@ const Toolbar = ({ editor }) => {
         }
     };
 
+    const setTableWidth = () => {
+        const width = window.prompt('Enter table width (e.g., 100%, 500px):');
+        if (width) {
+            editor.chain().focus().updateAttributes('table', { width: width }).run();
+        }
+    };
+
+    const setTableBackgroundColor = () => {
+        const color = window.prompt('Enter table background color (e.g., #f0f0f0, red):');
+        if (color) {
+            editor.chain().focus().updateAttributes('table', { backgroundColor: color }).run();
+        }
+    };
+
     return (
         <div className="border-b border-gray-200 bg-gray-50 p-2 flex flex-wrap gap-1">
             {/* Headings */}
@@ -327,6 +341,7 @@ const Toolbar = ({ editor }) => {
                 >
                     <span className="text-xs font-bold">🗑</span>
                 </ToolbarButton>
+                {/* Removed Table Background Color and Table Width options */}
             </div>
 
             {/* Cell Styling */}
@@ -431,7 +446,7 @@ function TiptapEditor({ name, content, setValue, height = '400px' }) {
             Table.configure({
                 resizable: true,
                 HTMLAttributes: {
-                    class: 'border-collapse table-auto w-full my-4',
+                    class: 'border-collapse table-auto my-4',
                 },
             }),
             TableRow,
@@ -440,49 +455,18 @@ function TiptapEditor({ name, content, setValue, height = '400px' }) {
                     class: 'border border-gray-300 bg-gray-100 font-bold p-2',
                 },
             }),
-            TableCell.extend({
-                addAttributes() {
-                    return {
-                        ...this.parent?.(),
-                        backgroundColor: {
-                            default: null,
-                            parseHTML: element => element.style.backgroundColor,
-                            renderHTML: attributes => {
-                                if (!attributes.backgroundColor) {
-                                    return {};
-                                }
-                                return {
-                                    style: `background-color: ${attributes.backgroundColor}`,
-                                };
-                            },
-                        },
-                        textAlign: {
-                            default: null,
-                            parseHTML: element => element.style.textAlign,
-                            renderHTML: attributes => {
-                                if (!attributes.textAlign) {
-                                    return {};
-                                }
-                                return {
-                                    style: `text-align: ${attributes.textAlign}`,
-                                };
-                            },
-                        },
-                        width: {
-                            default: null,
-                            parseHTML: element => element.style.width,
-                            renderHTML: attributes => {
-                                if (!attributes.width) {
-                                    return {};
-                                }
-                                return {
-                                    style: `width: ${attributes.width}`,
-                                };
-                            },
-                        },
-                    };
+            TableCell.configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300 p-2',
                 },
-            }).configure({
+            }),
+            TableRow,
+            TableHeader.configure({
+                HTMLAttributes: {
+                    class: 'border border-gray-300 bg-gray-100 font-bold p-2',
+                },
+            }),
+            TableCell.configure({
                 HTMLAttributes: {
                     class: 'border border-gray-300 p-2',
                 },
