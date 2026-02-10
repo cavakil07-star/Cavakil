@@ -14,37 +14,43 @@ export const LegalSolutions = () => {
             icon: '/icons/icon1.png',
             icon_bg: "#e6f0ff",
             heading: "Private Limited Company",
-            desc: "Incorporate your business with full legal backing and expert guidance."
+            desc: "Incorporate your business with full legal backing and expert guidance.",
+            slug: "private-limited-company-registration"
         },
         {
             icon: '/icons/icon2.png',
             icon_bg: "#e6f0ff",
             heading: "Digital Signature Certificate (DSC)",
-            desc: "Secure your digital identity for filing GST, ROC, and other government compliances."
+            desc: "Secure your digital identity for filing GST, ROC, and other government compliances.",
+            slug: "digital-signature"
         },
-        {
-            icon: '/icons/icon3.png',
-            icon_bg: "#e6f0ff",
-            heading: "Provident Fund (PF) Registration",
-            desc: "Stay compliant and employee-friendly with easy PF registration support."
-        },
+        // {
+        //     icon: '/icons/icon3.png',
+        //     icon_bg: "#e6f0ff",
+        //     heading: "Provident Fund (PF) Registration",
+        //     desc: "Stay compliant and employee-friendly with easy PF registration support.",
+        //     slug: "provident-fund-registration"
+        // },
         {
             icon: '/icons/icon4.png',
             icon_bg: "#e6f0ff",
             heading: "GST Return Filing",
-            desc: "Avoid penalties with timely and accurate GST return filing by experts."
+            desc: "Avoid penalties with timely and accurate GST return filing by experts.",
+            slug: "gst-return-filing"
         },
         {
             icon: '/icons/icon5.png',
             icon_bg: "#e6f0ff",
             heading: "Income Tax Filing",
-            desc: "Get expert help to file your personal or business income tax returns on time."
+            desc: "Get expert help to file your personal or business income tax returns on time.",
+            slug: "income-tax-e-filing"
         },
         {
             icon: '/icons/icon6.png',
             icon_bg: "#e6f0ff",
             heading: "GST Registration",
-            desc: "Ensure smooth tax operations with fast and accurate GST registration."
+            desc: "Ensure smooth tax operations with fast and accurate GST registration.",
+            slug: "gst-registration"
         }
     ];
 
@@ -103,7 +109,7 @@ export const LegalSolutions = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                         >
-                            <Link href={'/services'}>
+                            <Link href={`/services/${item.slug}`} className="flex flex-col items-start gap-4 h-full">
                                 {/* Hover effect overlay */}
                                 {hoveredIndex === index && (
                                     <motion.div
