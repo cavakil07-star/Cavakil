@@ -140,6 +140,7 @@ export default function CategoryDialog({ open, onOpenChange, selectedCategory, o
                                     id="name"
                                     {...register("name", {
                                         required: "Name is required",
+                                        maxLength: { value: 100, message: "Name must be at most 100 characters" }
                                     })}
                                     className={clsx("w-full", {
                                         "border-red-500": errors.name,

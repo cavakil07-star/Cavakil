@@ -31,18 +31,21 @@ import Image from 'next/image';
 const VALIDATION_RULES = {
     title: {
         required: "Title is required",
-        minLength: { value: 5, message: "Title must be at least 5 characters" }
+        minLength: { value: 5, message: "Title must be at least 5 characters" },
+        maxLength: { value: 120, message: "Title must be at most 120 characters" }
     },
     slug: {
         required: "Slug is required",
         pattern: {
             value: /^[a-z0-9-]+$/,
             message: "Slug can only contain lowercase letters, numbers and hyphens"
-        }
+        },
+        maxLength: { value: 120, message: "Slug must be at most 120 characters" }
     },
     shortDescription: {
         required: "Short description is required",
-        minLength: { value: 20, message: "Description must be at least 20 characters" }
+        minLength: { value: 20, message: "Description must be at least 20 characters" },
+        maxLength: { value: 220, message: "Description must be at most 220 characters" }
     },
     imageURL: {
         required: "Image URL is required",

@@ -24,7 +24,7 @@ import { Loader2 } from "lucide-react";
 
 // Zod schema for CallPlan
 const callPlanSchema = z.object({
-    name: z.string().min(1, "Name is required"),
+    name: z.string().min(1, "Name is required").max(100, "Name must be at most 100 characters"),
     price: z
         .number({ invalid_type_error: "Price must be a number" })
         .min(0, "Price must be at least 0"),

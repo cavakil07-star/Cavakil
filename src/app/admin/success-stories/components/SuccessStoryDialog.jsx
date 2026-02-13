@@ -88,7 +88,10 @@ export default function SuccessStoryDialog({ open, onOpenChange, selectedStory, 
                             <div className="col-span-3">
                                 <Input
                                     id="title"
-                                    {...register("title", { required: "Title is required" })}
+                                    {...register("title", {
+                                        required: "Title is required",
+                                        maxLength: { value: 100, message: "Title must be at most 100 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.title })}
                                     placeholder="Startup Success Story"
                                 />
@@ -104,7 +107,10 @@ export default function SuccessStoryDialog({ open, onOpenChange, selectedStory, 
                             <div className="col-span-3">
                                 <Input
                                     id="company"
-                                    {...register("company", { required: "Company is required" })}
+                                    {...register("company", {
+                                        required: "Company is required",
+                                        maxLength: { value: 100, message: "Company must be at most 100 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.company })}
                                     placeholder="TechVenture Pvt Ltd"
                                 />
@@ -131,6 +137,7 @@ export default function SuccessStoryDialog({ open, onOpenChange, selectedStory, 
                                         ))}
                                     </SelectContent>
                                 </Select>
+                                {errors.iconType && <p className="text-sm text-red-500 mt-1">{errors.iconType.message}</p>}
                             </div>
                         </div>
 
@@ -142,7 +149,10 @@ export default function SuccessStoryDialog({ open, onOpenChange, selectedStory, 
                             <div className="col-span-3">
                                 <Textarea
                                     id="challenge"
-                                    {...register("challenge", { required: "Challenge is required" })}
+                                    {...register("challenge", {
+                                        required: "Challenge is required",
+                                        maxLength: { value: 300, message: "Challenge must be at most 300 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.challenge })}
                                     placeholder="What was the client's challenge?"
                                     rows={2}
@@ -159,7 +169,10 @@ export default function SuccessStoryDialog({ open, onOpenChange, selectedStory, 
                             <div className="col-span-3">
                                 <Textarea
                                     id="result"
-                                    {...register("result", { required: "Result is required" })}
+                                    {...register("result", {
+                                        required: "Result is required",
+                                        maxLength: { value: 300, message: "Result must be at most 300 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.result })}
                                     placeholder="What was the outcome?"
                                     rows={2}

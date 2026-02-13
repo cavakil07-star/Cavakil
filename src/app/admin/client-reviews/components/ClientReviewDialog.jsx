@@ -122,7 +122,10 @@ export default function ClientReviewDialog({ open, onOpenChange, selectedReview,
                             <div className="col-span-3">
                                 <Input
                                     id="name"
-                                    {...register("name", { required: "Name is required" })}
+                                    {...register("name", {
+                                        required: "Name is required",
+                                        maxLength: { value: 100, message: "Name must be at most 100 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.name })}
                                     placeholder="Rajesh Kumar"
                                 />
@@ -138,7 +141,10 @@ export default function ClientReviewDialog({ open, onOpenChange, selectedReview,
                             <div className="col-span-3">
                                 <Input
                                     id="title"
-                                    {...register("title", { required: "Title is required" })}
+                                    {...register("title", {
+                                        required: "Title is required",
+                                        maxLength: { value: 100, message: "Title must be at most 100 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.title })}
                                     placeholder="CEO, TechStartup Solutions"
                                 />
@@ -200,7 +206,10 @@ export default function ClientReviewDialog({ open, onOpenChange, selectedReview,
                             <div className="col-span-3">
                                 <Textarea
                                     id="review"
-                                    {...register("review", { required: "Review is required" })}
+                                    {...register("review", {
+                                        required: "Review is required",
+                                        maxLength: { value: 500, message: "Review must be at most 500 characters" }
+                                    })}
                                     className={clsx("w-full", { "border-red-500": errors.review })}
                                     placeholder="Write the client's review here..."
                                     rows={4}
@@ -231,19 +240,20 @@ export default function ClientReviewDialog({ open, onOpenChange, selectedReview,
                                 Visible
                             </Label>
                             <div className="col-span-3">
-                                <Switch
-                                    id="isVisible"
-                                    checked={watch("isVisible")}
-                                    onCheckedChange={(checked) => setValue("isVisible", checked)}
-                                />
-                            </div>
-                        </div>
-
-                        {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-                    </div>
-
-                    <DialogFooter>
-                        <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                                <Select
+                                    value={watch("platform")}
+                                    onValueChange={(value) => setValue("platform", value)}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select platform" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {platforms.map((p) => (
+                                            <SelectItem key={p} value={p}>{p}</SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors.platform && <p className="text-sm text-red-500 mt-1">{errors.platform.message}</p>}
                             Cancel
                         </Button>
                         <Button type="submit" disabled={isSubmitting}>
