@@ -3,7 +3,9 @@ import { z } from 'zod';
 
 // Step 3 schema for each “big description” section
 const ServiceBigDescriptionSection = z.object({
-    name: z.string().min(1, 'Section Name is required'),
+    name: z.string()
+        .min(1, 'Section Name is required')
+        .max(40, 'Section Name must be at most 40 characters'),
     title: z.string().min(1, 'Section Title is required'),
     content: z.string().min(1, 'Section Content is required'),
 });

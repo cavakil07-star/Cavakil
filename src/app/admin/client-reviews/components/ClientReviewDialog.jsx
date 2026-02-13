@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import {
     Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
@@ -116,26 +116,35 @@ export default function ClientReviewDialog({ open, onOpenChange, selectedReview,
 
                         {/* Name */}
                         <div className="grid grid-cols-4 items-start gap-4">
-                            <Label htmlFor="name" className="text-right mt-2">
-                                Name<span className="text-red-500"> *</span>
+                            <Label htmlFor="platform" className="text-right mt-2">
+                                Platform<span className="text-red-500"> *</span>
                             </Label>
                             <div className="col-span-3">
-                                <Input
-                                    id="name"
-                                    {...register("name", {
-                                        required: "Name is required",
-                                        maxLength: { value: 100, message: "Name must be at most 100 characters" }
-                                    })}
-                                    className={clsx("w-full", { "border-red-500": errors.name })}
-                                    placeholder="Rajesh Kumar"
+                                <Controller
+                                    name="platform"
+                                    control={control}
+                                    rules={{ required: "Platform is required" }}
+                                    render={({ field, fieldState }) => (
+                                        <>
+                                            <Select
+                                                value={field.value}
+                                                onValueChange={field.onChange}
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Select platform" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {platforms.map((p) => (
+                                                        <SelectItem key={p} value={p}>{p}</SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            {fieldState.error && <p className="text-sm text-red-500 mt-1">{fieldState.error.message}</p>}
+                                        </>
+                                    )}
                                 />
-                                {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>}
                             </div>
                         </div>
-
-                        {/* Title */}
-                        <div className="grid grid-cols-4 items-start gap-4">
-                            <Label htmlFor="title" className="text-right mt-2">
                                 Title<span className="text-red-500"> *</span>
                             </Label>
                             <div className="col-span-3">
