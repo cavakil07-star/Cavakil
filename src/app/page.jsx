@@ -1,3 +1,4 @@
+'use client';
 // app/page.jsx
 import CallButton from "@/components/website/CallButton";
 import Footer from "@/components/website/common/Footer";
@@ -7,7 +8,6 @@ import Contact from "@/components/website/home/Contact";
 import HeroSection2 from "@/components/website/home/HeroSection2";
 import { LegalSolutions } from "@/components/website/home/LegalSolutions";
 import ServicesByCategory from "@/components/website/home/ServicesByCategory";
-import Testimonials from "@/components/website/home/Testimonials";
 import VideoSection from "@/components/website/home/VideoSection";
 import TeamShowcase from "@/components/website/home/TeamShowcase";
 import WhyChooseUs from "@/components/website/home/WhyChooseUs";
@@ -15,21 +15,11 @@ import TrustMessaging from "@/components/website/home/TrustMessaging";
 import TrustSignals from "@/components/website/home/TrustSignals";
 import BigHeadlines from "@/components/website/home/BigHeadlines";
 import FAQSection from "@/components/website/home/FAQSection";
-import  WhatsAppButton from "@/components/website/WhatsAppButton";
-import { getCategories, getServices } from "@/lib/main/getHomePageData";
+import WhatsAppButton from "@/components/website/WhatsAppButton";
+import { useWebsiteLayout } from "@/hooks/useWebsiteData";
 
-export const metadata = {
-  title: "CA Vakil",
-};
-
-// Force dynamic rendering - skip static generation during build
-export const dynamic = 'force-dynamic';
-
-export default async function Home() {
-  const servicesData = await getServices();
-  const services = servicesData?.data || [];
-  const categoriesData = await getCategories();
-  const categories = categoriesData?.data || [];
+export default function Home() {
+  const { services, categories } = useWebsiteLayout();
 
   return (
     <div className="">
@@ -47,12 +37,11 @@ export default async function Home() {
         <TeamShowcase />
         <TrustSignals />
         <div className="pt-10 md:pt-16" />
-        <Testimonials />
         <WhyChooseUs />
         <FAQSection />
         <Contact />
         <Footer />
-        <WhatsAppButton/>
+        <WhatsAppButton />
         <CallButton />
       </div>
     </div>

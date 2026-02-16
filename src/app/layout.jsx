@@ -2,6 +2,7 @@
 import "./globals.css";;
 import { Poppins, Montserrat, Inter } from "next/font/google";
 import WhatsAppButton from "@/components/website/WhatsAppButton";
+import QueryProvider from "@/components/providers/QueryProvider";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -36,8 +37,11 @@ export default function RootLayout({ children }) {
       <body
         className={`${poppins.variable} ${montserrat.variable} ${inter.variable} antialiased`}
       >
-        <main>{children}</main>
-        {/* <WhatsAppButton /> */}
+        <main>
+          <QueryProvider>
+            {children}
+          </QueryProvider>
+        </main>
       </body>
     </html>
   );

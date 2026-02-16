@@ -1,29 +1,22 @@
-// app/refund-policy/page.jsx
+'use client';
+// app/(legal pages)/refund-policy/page.jsx
 import WebsiteLayout from "@/components/website/WebsiteLayout";
-import { getCategories, getServices } from "@/lib/main/getHomePageData";
-import { getRefundPolicy } from "@/lib/main/getStaticData";
 import ReactMarkdown from 'react-markdown';
 import styles from './components/post.module.css';
 import rehypeRaw from 'rehype-raw';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-export const metadata = {
-  title: "CA Vakil",
-};
-
-// Force dynamic rendering - skip static generation during build
-export const dynamic = 'force-dynamic';
-
-export default async function page() {
-    const servicesData = await getServices();
-    const services = servicesData?.data || [];
-    const categoriesData = await getCategories();
-    const categories = categoriesData?.data || [];
-
-    const refundPolicy = await getRefundPolicy();
+export default function Page() {
+    const policyQuery = useQuery({
+        queryKey: ['public-refund-policy'],
+        queryFn: () => axios.get('/api/refund-policy').then(res => res.data),
+        staleTime: 1000 * 60 * 10,
+    });
+    const refundPolicy = policyQuery.data;
 
     return (
-        <WebsiteLayout services={services} categories={categories}>
-
+        <WebsiteLayout>
             {refundPolicy &&
                 <div>
                     {/* Full-width header section */}

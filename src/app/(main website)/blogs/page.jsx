@@ -1,24 +1,14 @@
+'use client';
 // app/blogs/page.jsx
 import React from 'react';
-import { getCategories, getServices } from '@/lib/main/getHomePageData';
 import BlogsClient from './components/BlogsClient';
-import { getBlogsData } from '@/lib/main/getBlogsData';
+import { usePublicBlogs, useWebsiteLayout } from '@/hooks/useWebsiteData';
 
-export const metadata = {
-  title: "CA Vakil",
-};
+export default function Page() {
+    const { services, categories } = useWebsiteLayout();
 
-// Force dynamic rendering - skip static generation during build
-export const dynamic = 'force-dynamic';
-
-export default async function page() {
-    const servicesData = await getServices();
-    const services = servicesData?.data || [];
-    const categoriesData = await getCategories();
-    const categories = categoriesData?.data || [];
-
-    const blogsData = await getBlogsData();
-    const blogs = blogsData?.data || [];
+    const blogsQuery = usePublicBlogs();
+    const blogs = blogsQuery.data?.data || [];
 
     return (
         <BlogsClient
