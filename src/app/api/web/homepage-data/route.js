@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import Service from "@/models/serviceModel";
 import Category from "@/models/categoryModel";
+import Testimonial from "@/models/testimonialModel";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
@@ -10,9 +11,11 @@ export async function GET(req) {
         // Optional filters via query params
         const { searchParams } = new URL(req.url);
         const status = searchParams.get('status');
+        const featured = searchParams.get('featured'); // Fixed missing variable definition
 
         const serviceQuery = {};
         const categoryQuery = {};
+        const testimonialQuery = { isVisible: true };
 
         if (status !== null) {
             serviceQuery.status = status === 'true';
@@ -31,11 +34,16 @@ export async function GET(req) {
             .find(categoryQuery)
             .sort({ createdAt: -1 });
 
+        const testimonials = await Testimonial
+            .find(testimonialQuery)
+            .sort({ createdAt: -1 });
+
         return NextResponse.json({
             success: true,
             data: {
                 services,
                 categories,
+                testimonials,
             },
         });
     } catch (error) {

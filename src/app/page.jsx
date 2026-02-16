@@ -17,6 +17,7 @@ import BigHeadlines from "@/components/website/home/BigHeadlines";
 import FAQSection from "@/components/website/home/FAQSection";
 import WhatsAppButton from "@/components/website/WhatsAppButton";
 import { useWebsiteLayout } from "@/hooks/useWebsiteData";
+import Testimonials from "@/components/website/Testimonials";
 
 export default function Home() {
   const { services, categories } = useWebsiteLayout();
@@ -37,6 +38,7 @@ export default function Home() {
         <TeamShowcase />
         <TrustSignals />
         <div className="pt-10 md:pt-16" />
+        <Testimonials />
         <WhyChooseUs />
         <FAQSection />
         <Contact />

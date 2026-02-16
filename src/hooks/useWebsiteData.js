@@ -67,3 +67,23 @@ export const useWebsiteLayout = () => {
         isError: servicesQuery.isError || categoriesQuery.isError,
     };
 };
+
+// Fetch testimonials (client-side, no ISR)
+export const useTestimonials = () => {
+    const testimonialsQuery = useQuery({
+        queryKey: ['public-testimonials'],
+        queryFn: async () => {
+            const res = await axios.get('/api/web/testimonials');
+            return res.data?.data || [];
+        },
+        staleTime: 5 * 60 * 1000, // 5 minutes
+        refetchOnWindowFocus: false,
+    });
+
+    return {
+        testimonialsQuery,
+        testimonials: testimonialsQuery.data || [],
+        isLoading: testimonialsQuery.isLoading,
+        isError: testimonialsQuery.isError,
+    };
+};

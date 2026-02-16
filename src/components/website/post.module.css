@@ -97,6 +97,12 @@
     padding: 12px 16px;
 }
 
+.postStyle th strong,
+.postStyle th span,
+.postStyle th p {
+    color: white !important;
+}
+
 .postStyle td {
     padding: 12px 16px;
     border-bottom: 1px solid #f0f0f0;
