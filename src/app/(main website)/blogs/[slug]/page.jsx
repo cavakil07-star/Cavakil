@@ -1,74 +1,45 @@
-// app/blogs/[slug]page.jsx
+'use client';
+// app/blogs/[slug]/page.jsx
 
 import EnquiryForm from '@/components/website/EnquiryForm';
 import TalkToLawyerCard from '@/components/website/TalkToLawyerCard';
 import WebsiteLayout from '@/components/website/WebsiteLayout';
-import { getBlogBySlug } from '@/lib/main/getBlogsData';
-import { getCategories, getServices } from '@/lib/main/getHomePageData';
 import React from 'react'
 import BlogData from '../components/BlogData';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, } from '@/components/ui/breadcrumb';
-import { getRelatedServices } from '@/lib/main/relatedServices';
-import ServiceCard from '../components/ServiceCard';
 import LatestBlogs from '@/components/website/LatestBlogs';
-import { notFound } from 'next/navigation';
+import { usePublicBlogBySlug } from '@/hooks/useWebsiteData';
+import { useParams } from 'next/navigation';
 
-// Force dynamic rendering - skip static generation during build
-export const dynamic = 'force-dynamic';
+export default function Page() {
+    const params = useParams();
+    const slug = params?.slug;
 
+    const blogQuery = usePublicBlogBySlug(slug);
+    const blog = blogQuery.data?.data;
 
-// export async function generateMetadata({ params }) {
-//     const slug = await params
-//     // const blog = await getBlogBySlug(slug.slug);
-
-//     if (!blog) return {
-//         title: "blog Not Found",
-//         description: "The requested service does not exist"
-//     };
-
-//     return {
-//         title: blog.title,
-//         description: blog.shortDescription,
-//         openGraph: {
-//             title: blog.title,
-//             description: blog.shortDescription,
-//             images: [blog.imageURL],
-//             url: `/blogs/${blog.slug}`,
-//             type: 'website'
-//         },
-//         twitter: {
-//             card: 'summary_large_image',
-//             title: blog.title,
-//             description: blog.shortDescription,
-//             images: [blog.imageURL]
-//         }
-//     };
-// }
-
-export default async function page({ params }) {
-    const servicesData = await getServices();
-    const services = servicesData?.data || [];
-    const categoriesData = await getCategories();
-    const categories = categoriesData?.data || [];
-
-    const { slug } = await params;
-    const blogData = await getBlogBySlug(slug)
-    const blog = blogData?.data;
-
-    // If blog is not found, show 404 page
-    if (!blog) {
-        notFound();
+    if (blogQuery.isLoading) {
+        return (
+            <WebsiteLayout>
+                <div className="max-w-7xl mx-auto py-20 text-center">
+                    <p className="text-gray-500">Loading blog...</p>
+                </div>
+            </WebsiteLayout>
+        );
     }
 
-    // console.log(blog)
-    // const relatedServices = getRelatedServices(
-    //     blog.tags || [],
-    //     services.data || [],
-    //     3
-    // );
+    if (!blog) {
+        return (
+            <WebsiteLayout>
+                <div className="max-w-7xl mx-auto py-20 text-center">
+                    <h1 className="text-2xl font-bold text-gray-800">Blog Not Found</h1>
+                </div>
+            </WebsiteLayout>
+        );
+    }
 
     return (
-        <WebsiteLayout services={services} categories={categories}>
+        <WebsiteLayout>
             <article className="max-w-7xl mx-auto space-y-5 px-2">
                 <script
                     type="application/ld+json"
@@ -79,7 +50,7 @@ export default async function page({ params }) {
                             "name": blog.title,
                             "description": blog.shortDescription,
                             "image": blog.imageURL,
-                            "url": `${process.env.NEXT_PUBLIC_SITE_URL}/blogs/${blog.slug}`
+                            "url": `${typeof window !== 'undefined' ? window.location.origin : ''}/blogs/${blog.slug}`
                         })
                     }}
                 />
@@ -106,11 +77,6 @@ export default async function page({ params }) {
                     <div className="lg:w-82 flex flex-col gap-5 lg:sticky lg:top-6 lg:h-fit">
                         <div>
                             <div className='flex flex-col gap-4'>
-                                {/* {relatedServices.map((item, idx) => (
-                                <div key={idx}>
-                                    <ServiceCard service={item} />
-                                </div>
-                            ))} */}
                             </div>
                         </div>
                         <TalkToLawyerCard />
@@ -123,7 +89,6 @@ export default async function page({ params }) {
                 </div>
 
             </article>
-        </WebsiteLayout >
+        </WebsiteLayout>
     )
 }
-

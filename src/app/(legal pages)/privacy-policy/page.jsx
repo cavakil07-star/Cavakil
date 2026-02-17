@@ -1,30 +1,22 @@
-// app/privacy-policy/page.jsx
+'use client';
+// app/(legal pages)/privacy-policy/page.jsx
 import WebsiteLayout from "@/components/website/WebsiteLayout";
-import { getCategories, getServices } from "@/lib/main/getHomePageData";
-import { getPrivacyPolicy } from "@/lib/main/getStaticData";
 import ReactMarkdown from 'react-markdown';
 import styles from './components/post.module.css';
 import rehypeRaw from 'rehype-raw';
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-export const metadata = {
-  title: "CA Vakil",
-};
-
-// Force dynamic rendering - skip static generation during build
-export const dynamic = 'force-dynamic';
-
-export default async function page() {
-
-    const servicesData = await getServices();
-    const services = servicesData?.data || [];
-    const categoriesData = await getCategories();
-    const categories = categoriesData?.data || [];
-
-    const privacyPolicy = await getPrivacyPolicy();
+export default function Page() {
+    const policyQuery = useQuery({
+        queryKey: ['public-privacy-policy'],
+        queryFn: () => axios.get('/api/privacy-policy').then(res => res.data),
+        staleTime: 1000 * 60 * 10,
+    });
+    const privacyPolicy = policyQuery.data;
 
     return (
-        <WebsiteLayout services={services} categories={categories}>
-            {/* Full-width header section */}
+        <WebsiteLayout>
             {privacyPolicy &&
                 <div>
                     <div className="w-full bg-[#002244] py-12">

@@ -1,10 +1,22 @@
+'use client';
 
-import { getLatestBlogs } from '@/lib/main/getBlogsData';
 import React from 'react';
 import BlogCard from './BlogShowCard';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
-async function LatestBlogs() {
-    const blogs = await getLatestBlogs()
+function LatestBlogs() {
+    const blogsQuery = useQuery({
+        queryKey: ['public-latest-blogs'],
+        queryFn: () => axios.get('/api/web/blogs').then(res => res.data),
+        staleTime: 1000 * 60 * 5,
+    });
+
+    const blogs = (blogsQuery.data?.data || []).slice(0, 4);
+
+    if (blogsQuery.isLoading) {
+        return null;
+    }
 
     return (
         <div className="py-12 px-4 sm:px-6 lg:px-8">

@@ -1,24 +1,23 @@
-// app/orderSuccess/page.jsx
+'use client';
+// app/orderSuccess/[id]/page.jsx
 import WebsiteLayout from "@/components/website/WebsiteLayout";
-import { getCategories, getServices } from "@/lib/main/getHomePageData";
-import { getOrderById } from "@/lib/main/getOrders";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-// Force dynamic rendering - skip static generation during build
-export const dynamic = 'force-dynamic';
+export default function Page() {
+    const params = useParams();
+    const id = params?.id;
 
-export default async function page({ params }) {
-    const { id } = await params;
-    
-    const servicesData = await getServices();
-    const services = servicesData?.data || [];
-    const categoriesData = await getCategories();
-    const categories = categoriesData?.data || [];
-
-    const order = await getOrderById(id)
-    // console.log(order)
+    const orderQuery = useQuery({
+        queryKey: ['public-order', id],
+        queryFn: () => axios.get(`/api/orders/${id}`).then(res => res.data),
+        enabled: !!id,
+        staleTime: 1000 * 60 * 5,
+    });
 
     return (
-        <WebsiteLayout services={services} categories={categories}>
+        <WebsiteLayout>
             <div className="max-w-4xl mx-auto px-4 py-8"></div>
         </WebsiteLayout>
     )
