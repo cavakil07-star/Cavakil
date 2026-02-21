@@ -72,11 +72,13 @@ export default function SubServiceForm({
         const toastId = toast.loading('Processing Order... Please wait')
         setLoading(true)
         if (!session) {
+            toast.dismiss(toastId)
             setLoading(false)
             setIsLoginDialogOpen(true);
             return
         };
         if (session && session.user.role !== 'user') {
+            toast.dismiss(toastId)
             setLoading(false)
             alert("Admins and Sub Admins cannot create order!");
             return
@@ -105,12 +107,12 @@ export default function SubServiceForm({
                 })
                 const result = await res.json()
                 console.log(result)
-                toast.success("Order Created Successfully")
+                toast.success("Order Created Successfully", { id: toastId })
                 router.push('/user')
 
             } catch (err) {
                 console.error("Free order failed:", err)
-                toast.error("Error creating order")
+                toast.error("Error creating order", { id: toastId })
             } finally {
                 setLoading(false)
             }
@@ -126,6 +128,8 @@ export default function SubServiceForm({
 
         if (!orderData.id || !orderData.amount) {
             console.error('Bad order response:', orderData)
+            toast.dismiss(toastId)
+            setLoading(false)
             return
         }
 
@@ -207,154 +211,153 @@ export default function SubServiceForm({
                 >
                     {/* Required Information Section */}
                     {isDetailsRequired && requiredDetails?.length > 0 && (
-                    <Card className="border-none shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-                        <div className="bg-gradient-to-r from-[#003366] to-[#0055aa] p-5 text-white flex items-center gap-3">
-                            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
-                                <User className="h-5 w-5" />
+                        <Card className="border-none shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+                            <div className="bg-gradient-to-r from-[#003366] to-[#0055aa] p-5 text-white flex items-center gap-3">
+                                <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
+                                    <User className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h2 className="text-lg font-bold">Personal Details</h2>
+                                    <p className="text-blue-100 text-xs text-opacity-80">Please provide accurate information for your application</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 className="text-lg font-bold">Personal Details</h2>
-                                <p className="text-blue-100 text-xs text-opacity-80">Please provide accurate information for your application</p>
-                            </div>
-                        </div>
-                        <CardContent className="p-8 bg-white">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {requiredDetails.map((detail) => (
-                                    <FormField
-                                        key={detail._id}
-                                        control={control}
-                                        name={detail.name}
-                                        rules={{ required: `${detail.label} is required` }}
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-gray-700 font-semibold">{detail.label}</FormLabel>
-                                                <FormControl>
-                                                    <div className="relative group">
-                                                        <Input
-                                                            {...field}
-                                                            placeholder={`Enter ${detail.label}`}
-                                                            className="pl-4 h-12 border-gray-200 focus:border-[#003366] focus:ring-[#003366]/20 transition-all duration-300 rounded-lg bg-gray-50/50 group-hover:bg-white"
-                                                        />
-                                                    </div>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                            <CardContent className="p-8 bg-white">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                    {requiredDetails.map((detail) => (
+                                        <FormField
+                                            key={detail._id}
+                                            control={control}
+                                            name={detail.name}
+                                            rules={{ required: `${detail.label} is required` }}
+                                            render={({ field }) => (
+                                                <FormItem>
+                                                    <FormLabel className="text-gray-700 font-semibold">{detail.label}</FormLabel>
+                                                    <FormControl>
+                                                        <div className="relative group">
+                                                            <Input
+                                                                {...field}
+                                                                placeholder={`Enter ${detail.label}`}
+                                                                className="pl-4 h-12 border-gray-200 focus:border-[#003366] focus:ring-[#003366]/20 transition-all duration-300 rounded-lg bg-gray-50/50 group-hover:bg-white"
+                                                            />
+                                                        </div>
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
                     )}
 
                     {/* Required Documents Section */}
                     {isDocumentsRequired && requiredDocuments?.length > 0 && (
-                    <Card className="border-none shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-                        <div className="bg-gradient-to-r from-[#003366] to-[#0055aa] p-5 text-white flex items-center gap-3">
-                            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
-                                <FileText className="h-5 w-5" />
+                        <Card className="border-none shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+                            <div className="bg-gradient-to-r from-[#003366] to-[#0055aa] p-5 text-white flex items-center gap-3">
+                                <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
+                                    <FileText className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h2 className="text-lg font-bold">Required Documents</h2>
+                                    <p className="text-blue-100 text-xs text-opacity-80">Upload clear copies of the following documents</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 className="text-lg font-bold">Required Documents</h2>
-                                <p className="text-blue-100 text-xs text-opacity-80">Upload clear copies of the following documents</p>
-                            </div>
-                        </div>
-                        <CardContent className="p-8 bg-white">
-                            <div className="grid grid-cols-1 gap-6">
-                                {requiredDocuments.map((doc, idx) => (
-                                    <FormField
-                                        key={doc._id}
-                                        control={control}
-                                        name={doc.name}
-                                        rules={{ required: `${doc.label} is required` }}
-                                        render={({ field }) => (
-                                            <FormItem className="bg-gray-50 border border-gray-100 rounded-xl p-4 transition-all hover:shadow-md hover:border-blue-100">
-                                                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                                    <div className="flex items-center gap-3">
-                                                        <div className="bg-blue-50 text-[#003366] w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
-                                                            {idx + 1}
+                            <CardContent className="p-8 bg-white">
+                                <div className="grid grid-cols-1 gap-6">
+                                    {requiredDocuments.map((doc, idx) => (
+                                        <FormField
+                                            key={doc._id}
+                                            control={control}
+                                            name={doc.name}
+                                            rules={{ required: `${doc.label} is required` }}
+                                            render={({ field }) => (
+                                                <FormItem className="bg-gray-50 border border-gray-100 rounded-xl p-4 transition-all hover:shadow-md hover:border-blue-100">
+                                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                        <div className="flex items-center gap-3">
+                                                            <div className="bg-blue-50 text-[#003366] w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                                                {idx + 1}
+                                                            </div>
+                                                            <div>
+                                                                <FormLabel className="text-gray-900 font-semibold text-base mb-0 cursor-pointer">
+                                                                    {doc.label}
+                                                                </FormLabel>
+                                                                <p className="text-xs text-gray-500 mt-0.5">Supported formats: PDF, JPG, PNG</p>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <FormLabel className="text-gray-900 font-semibold text-base mb-0 cursor-pointer">
-                                                                {doc.label}
-                                                            </FormLabel>
-                                                            <p className="text-xs text-gray-500 mt-0.5">Supported formats: PDF, JPG, PNG</p>
-                                                        </div>
+
+                                                        <FormControl>
+                                                            <div className="relative">
+                                                                <Input
+                                                                    type="file"
+                                                                    className="hidden"
+                                                                    id={`file-${doc._id}`}
+                                                                    onChange={(e) => field.onChange(e.target.files)}
+                                                                />
+                                                                <label
+                                                                    htmlFor={`file-${doc._id}`}
+                                                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 border border-dashed ${field.value?.[0]
+                                                                            ? 'bg-green-50 border-green-200 text-green-700'
+                                                                            : 'bg-white border-blue-200 text-[#003366] hover:bg-blue-50'
+                                                                        }`}
+                                                                >
+                                                                    {field.value?.[0] ? (
+                                                                        <>
+                                                                            <CheckCircle2 className="w-4 h-4" />
+                                                                            <span className="text-sm font-medium truncate max-w-[200px]">
+                                                                                {field.value[0].name}
+                                                                            </span>
+                                                                        </>
+                                                                    ) : (
+                                                                        <>
+                                                                            <Upload className="w-4 h-4" />
+                                                                            <span className="text-sm font-medium">Choose File</span>
+                                                                        </>
+                                                                    )}
+                                                                </label>
+                                                            </div>
+                                                        </FormControl>
                                                     </div>
-                                                    
-                                                    <FormControl>
-                                                        <div className="relative">
-                                                            <Input
-                                                                type="file"
-                                                                className="hidden"
-                                                                id={`file-${doc._id}`}
-                                                                onChange={(e) => field.onChange(e.target.files)}
-                                                            />
-                                                            <label
-                                                                htmlFor={`file-${doc._id}`}
-                                                                className={`flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 border border-dashed ${
-                                                                    field.value?.[0] 
-                                                                    ? 'bg-green-50 border-green-200 text-green-700' 
-                                                                    : 'bg-white border-blue-200 text-[#003366] hover:bg-blue-50'
-                                                                }`}
-                                                            >
-                                                                {field.value?.[0] ? (
-                                                                    <>
-                                                                        <CheckCircle2 className="w-4 h-4" />
-                                                                        <span className="text-sm font-medium truncate max-w-[200px]">
-                                                                            {field.value[0].name}
-                                                                        </span>
-                                                                    </>
-                                                                ) : (
-                                                                    <>
-                                                                        <Upload className="w-4 h-4" />
-                                                                        <span className="text-sm font-medium">Choose File</span>
-                                                                    </>
-                                                                )}
-                                                            </label>
-                                                        </div>
-                                                    </FormControl>
-                                                </div>
-                                                <FormMessage className="mt-2" />
-                                            </FormItem>
-                                        )}
-                                    />
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                                                    <FormMessage className="mt-2" />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
                     )}
 
                     {/* Service Benefits Section */}
                     {benefits?.length > 0 && (
-                    <Card className="border-none shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
-                        <div className="bg-gradient-to-r from-emerald-600 to-teal-500 p-5 text-white flex items-center gap-3">
-                            <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
-                                <Gift className="h-5 w-5" />
+                        <Card className="border-none shadow-xl overflow-hidden bg-white/50 backdrop-blur-sm">
+                            <div className="bg-gradient-to-r from-emerald-600 to-teal-500 p-5 text-white flex items-center gap-3">
+                                <div className="bg-white/20 p-2 rounded-lg backdrop-blur-md">
+                                    <Gift className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h2 className="text-lg font-bold">Why Choose This Service</h2>
+                                    <p className="text-emerald-100 text-xs text-opacity-80">Benefits included with your purchase</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 className="text-lg font-bold">Why Choose This Service</h2>
-                                <p className="text-emerald-100 text-xs text-opacity-80">Benefits included with your purchase</p>
-                            </div>
-                        </div>
-                        <CardContent className="p-8 bg-white">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {benefits.map((benefit, idx) => (
-                                    <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-emerald-50/50 border border-emerald-100">
-                                        <CheckCircle2 className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
-                                        <span className="text-gray-700 font-medium">{benefit}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
+                            <CardContent className="p-8 bg-white">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {benefits.map((benefit, idx) => (
+                                        <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-emerald-50/50 border border-emerald-100">
+                                            <CheckCircle2 className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
+                                            <span className="text-gray-700 font-medium">{benefit}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
                     )}
 
                     {/* Payment Summary & Action */}
                     <Card className="border-none shadow-2xl bg-gradient-to-br from-gray-900 to-[#003366] text-white overflow-hidden relative">
                         {/* Background decoration */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-                        
+
                         <CardContent className="p-8 relative z-10">
                             <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                                 <div className="space-y-2">
@@ -380,9 +383,9 @@ export default function SubServiceForm({
                                         <span>256-bit SSL Secure Payment</span>
                                     </div>
                                 </div>
-                                
-                                <motion.div 
-                                    whileHover={{ scale: 1.02 }} 
+
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
                                     className="w-full md:w-auto"
                                 >

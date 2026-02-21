@@ -3,21 +3,28 @@ import SubService from '@/models/subServiceModel';
 import { connectDB } from '@/lib/mongodb';
 
 // GET a single sub-service by ID
-export async function GET(req) {
+export async function GET(req, { params }) {
     await connectDB();
+    const { id } = await params;
 
     const { searchParams } = new URL(req.url);
     const serviceId = searchParams.get('serviceId');
 
-    if (!serviceId) {
-        return NextResponse.json({ message: 'Missing serviceId' }, { status: 400 });
-    }
-
     try {
-        const subServices = await SubService.find({ service: serviceId });
-        return NextResponse.json(subServices);
+        if (serviceId) {
+            // Fetch multiple sub-services for a specific service
+            const subServices = await SubService.find({ service: serviceId });
+            return NextResponse.json(subServices);
+        } else {
+            // Fetch a single sub-service by ID
+            const subService = await SubService.findById(id);
+            if (!subService) {
+                return NextResponse.json({ message: 'Sub-service not found' }, { status: 404 });
+            }
+            return NextResponse.json(subService);
+        }
     } catch (error) {
-        return NextResponse.json({ message: 'Error fetching sub-services', error }, { status: 500 });
+        return NextResponse.json({ message: 'Error fetching sub-service(s)', error }, { status: 500 });
     }
 }
 
