@@ -17,7 +17,7 @@ function TTLPlans({ plans }) {
                         </p>
                     </div>
 
-                    {!selectedPlan &&
+                    {!selectedPlan && plans.length > 0 && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {plans.map(plan => (
                                 <div
@@ -48,7 +48,21 @@ function TTLPlans({ plans }) {
                                 </div>
                             ))}
                         </div>
-                    }
+                    )}
+
+                    {!selectedPlan && plans.length === 0 && (
+                        <div className="text-center py-12 px-4 bg-white/5 border border-white/10 rounded-2xl backdrop-blur-sm">
+                            <div className="bg-white/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg className="w-8 h-8 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-semibold text-white mb-2">Consultation Plans Coming Soon</h3>
+                            <p className="text-blue-100/70 max-w-md mx-auto">
+                                Our experts are currently updating our consultation offerings. Please check back shortly or contact us directly.
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Booking Form */}
