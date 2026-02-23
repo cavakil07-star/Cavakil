@@ -14,7 +14,7 @@ export default function Page() {
     queryFn: () => axios.get('/api/call-plans').then(res => res.data),
     staleTime: 1000 * 60 * 5,
   });
-  const callPlans = callPlansQuery.data || [];
+  const callPlans = callPlansQuery.data?.data || [];
 
   return <TTLClient services={services} categories={categories} callPlans={callPlans} />
 }
