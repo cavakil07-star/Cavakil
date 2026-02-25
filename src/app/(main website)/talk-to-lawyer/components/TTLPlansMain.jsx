@@ -5,9 +5,7 @@ import TTLPlans from './TTLPlans'
 
 function TTLPlansMain({ plans }) {
     return (
-        <SessionProvider>
-            <TTLPlans plans={plans} />
-        </SessionProvider>
+        <TTLPlans plans={plans} />
     )
 }
 

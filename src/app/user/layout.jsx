@@ -15,15 +15,13 @@ function layout({ children }) {
         }
     }))
     return (
-        <SessionProvider>
-            <QueryClientProvider client={queryClient}>
-                <div>{children}</div>
-                {process.env.NODE_ENV === 'development' && (
-                    <ReactQueryDevtools initialIsOpen={false} />
-                )}
-                <Toaster position="top-right" />
-            </QueryClientProvider>
-        </SessionProvider>
+        <QueryClientProvider client={queryClient}>
+            <div>{children}</div>
+            {process.env.NODE_ENV === 'development' && (
+                <ReactQueryDevtools initialIsOpen={false} />
+            )}
+            <Toaster position="top-right" />
+        </QueryClientProvider>
     )
 }
 
