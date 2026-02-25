@@ -27,10 +27,10 @@ const AuthDialog = ({ open, onOpenChange }) => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     setErrorMsg("");
-    
+
     const values = form.getValues();
     const identifier = loginMethod === "phone" ? values.phone : values.email;
-    
+
     // Validate based on method
     if (loginMethod === "phone" && !/^\d{10}$/.test(identifier)) {
       setErrorMsg("Enter a valid 10-digit phone number");
@@ -40,7 +40,7 @@ const AuthDialog = ({ open, onOpenChange }) => {
       setErrorMsg("Enter a valid email address");
       return;
     }
-    
+
     setIsLoading(true);
 
     try {
@@ -49,20 +49,20 @@ const AuthDialog = ({ open, onOpenChange }) => {
         sessionId: "ABCX",
         otp: "8568",
       };
-      
+
       if (loginMethod === "phone") {
         signInData.phone = values.phone;
       } else {
         signInData.email = values.email;
       }
-      
+
       const result = await signIn("otp", signInData);
 
       if (result?.error) {
         setErrorMsg(result.error);
       } else {
         onOpenChange(false);
-        window.location.href = result?.url || "/";
+        window.location.reload();
       }
     } catch (error) {
       setErrorMsg("Login failed. Please try again.");
@@ -170,22 +170,20 @@ const AuthDialog = ({ open, onOpenChange }) => {
                   <button
                     type="button"
                     onClick={() => handleMethodChange("phone")}
-                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
-                      loginMethod === "phone"
+                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${loginMethod === "phone"
                         ? "bg-white text-gray-900 shadow-sm"
                         : "text-gray-500 hover:text-gray-700"
-                    }`}
+                      }`}
                   >
                     Phone
                   </button>
                   <button
                     type="button"
                     onClick={() => handleMethodChange("email")}
-                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${
-                      loginMethod === "email"
+                    className={`flex-1 rounded-lg py-2 text-sm font-medium transition-all ${loginMethod === "email"
                         ? "bg-white text-gray-900 shadow-sm"
                         : "text-gray-500 hover:text-gray-700"
-                    }`}
+                      }`}
                   >
                     Email
                   </button>
