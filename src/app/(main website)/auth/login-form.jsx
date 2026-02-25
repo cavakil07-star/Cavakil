@@ -12,7 +12,7 @@ export const LoginForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') || '/';
-  
+
   const [variant, setVariant] = useState('LOGIN'); // 'LOGIN' | 'REGISTER'
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -61,8 +61,8 @@ export const LoginForm = () => {
       } else {
         // NextAuth Login
         const result = await signIn('credentials', {
-           ...formData,
-           redirect: false,
+          ...formData,
+          redirect: false,
         });
 
         if (result?.error) {
@@ -71,8 +71,7 @@ export const LoginForm = () => {
 
         if (result?.ok) {
           toast.success('Logged in successfully!');
-          router.push(callbackUrl);
-          router.refresh(); 
+          window.location.href = callbackUrl;
         }
       }
     } catch (error) {
@@ -89,7 +88,7 @@ export const LoginForm = () => {
     <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
       <div className="p-8">
         <div className="text-center mb-8">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl font-bold text-gray-900 mb-2"
@@ -97,8 +96,8 @@ export const LoginForm = () => {
             {variant === 'LOGIN' ? 'Welcome Back' : 'Create Account'}
           </motion.h2>
           <p className="text-gray-500 text-sm">
-            {variant === 'LOGIN' 
-              ? 'Enter your credentials to access your account' 
+            {variant === 'LOGIN'
+              ? 'Enter your credentials to access your account'
               : 'Join us today and start your journey'}
           </p>
         </div>
@@ -124,7 +123,7 @@ export const LoginForm = () => {
                     className={inputClasses}
                   />
                 </div>
-                
+
                 {/* Phone */}
                 <div className="relative">
                   <Phone className={iconClasses} />
@@ -201,11 +200,11 @@ export const LoginForm = () => {
           </div>
 
           <div className="flex items-center justify-between mt-2 mb-6">
-             {variant === 'LOGIN' && (
-               <Link href="/auth/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500">
-                 Forgot password?
-               </Link>
-             )}
+            {variant === 'LOGIN' && (
+              <Link href="/auth/forgot-password" className="text-sm font-medium text-blue-600 hover:text-blue-500">
+                Forgot password?
+              </Link>
+            )}
           </div>
 
           <button
