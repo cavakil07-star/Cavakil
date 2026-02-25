@@ -20,18 +20,16 @@ function layout({ children }) {
     }))
 
     return (
-        <SessionProvider>
-            <QueryClientProvider client={queryClient}>
-                <LayoutDashboard sidebarLinks={ADMIN_SIDEBAR_LINKS}>
-                    {children}
-                </LayoutDashboard>
+        <QueryClientProvider client={queryClient}>
+            <LayoutDashboard sidebarLinks={ADMIN_SIDEBAR_LINKS}>
+                {children}
+            </LayoutDashboard>
 
-                {process.env.NODE_ENV === 'development' && (
-                    <ReactQueryDevtools initialIsOpen={false} />
-                )}
-                <Toaster position="top-right" />
-            </QueryClientProvider>
-        </SessionProvider>
+            {process.env.NODE_ENV === 'development' && (
+                <ReactQueryDevtools initialIsOpen={false} />
+            )}
+            <Toaster position="top-right" />
+        </QueryClientProvider>
     )
 }
 
