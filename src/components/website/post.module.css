@@ -36,12 +36,15 @@
 .postStyle ul,
 .postStyle ol {
     margin: 1rem 0 1.5rem;
-    padding-left: 1.8rem;
+    padding-left: 1.5rem;
+    list-style: none;
+    /* Hide default dots */
 }
 
 .postStyle li {
     margin-bottom: 0.7rem;
     position: relative;
+    padding-left: 0.5rem;
 }
 
 .postStyle ul li::before {
@@ -49,8 +52,9 @@
     color: #002244;
     font-weight: bold;
     display: inline-block;
-    width: 1em;
-    margin-left: -1em;
+    position: absolute;
+    left: -1rem;
+    top: 0;
 }
 
 .postStyle a {

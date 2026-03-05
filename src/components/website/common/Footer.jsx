@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from 'react-icons/fa';
 
 export default function Footer() {
     const quickLinks = [
@@ -30,34 +30,29 @@ export default function Footer() {
     ];
 
     const socialLinks = [
-        { 
-            name: 'Facebook', 
-            icon: FaFacebook, 
+        {
+            name: 'Facebook',
+            icon: FaFacebook,
             url: 'https://facebook.com',
             color: 'hover:bg-[#1877F2]'
         },
-        { 
-            name: 'Twitter', 
-            icon: FaTwitter, 
-            url: 'https://twitter.com',
-            color: 'hover:bg-[#1DA1F2]'
-        },
-        { 
-            name: 'Instagram', 
-            icon: FaInstagram, 
+
+        {
+            name: 'Instagram',
+            icon: FaInstagram,
             url: 'https://www.instagram.com/ca.vakil?igsh=Ynl4ajJ2b2JqZnJ1&utm_source=qr',
             color: 'hover:bg-gradient-to-r hover:from-[#833AB4] hover:via-[#FD1D1D] hover:to-[#FCAF45]'
         },
-        { 
-            name: 'LinkedIn', 
-            icon: FaLinkedin, 
+        {
+            name: 'LinkedIn',
+            icon: FaLinkedin,
             url: 'https://linkedin.com',
             color: 'hover:bg-[#0A66C2]'
         },
-        { 
-            name: 'YouTube', 
-            icon: FaYoutube, 
-            url:'https://www.youtube.com/@CAVakil',
+        {
+            name: 'YouTube',
+            icon: FaYoutube,
+            url: 'https://www.youtube.com/@CAVakil',
             color: 'hover:bg-[#FF0000]'
         },
     ];
