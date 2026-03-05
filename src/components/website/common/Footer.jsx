@@ -46,7 +46,7 @@ export default function Footer() {
         {
             name: 'LinkedIn',
             icon: FaLinkedin,
-            url: 'https://linkedin.com',
+            url: 'https://www.linkedin.com/in/ca-vakil-8383113a4/',
             color: 'hover:bg-[#0A66C2]'
         },
         {
